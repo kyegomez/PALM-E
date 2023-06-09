@@ -1,11 +1,11 @@
 # Agora
 This implementation of PALM-E is brought to you by Agora, we're a collective of Creators!
 
-![Join us and unleash your creator spirit](https://apac.ai/Agora)
+[Join us and unleash your creator spirit](https://apac.ai/Agora)
 
 # PALM-E: A Revolutionary Multi-Modal AI Model
 
-![PaLM-E: An Embodied Multimodal Language Model](https://arxiv.org/pdf/2303.03378v1.pdf)
+[PaLM-E: An Embodied Multimodal Language Model](https://arxiv.org/pdf/2303.03378v1.pdf)
 
 
 PALM-E is an innovative multi-modal AI model that combines the power of pre-trained language models with continuous observation encoders, such as Vision Transformers (ViT). 
