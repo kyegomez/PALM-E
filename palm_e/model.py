@@ -115,31 +115,43 @@ class PALME(nn.Module):
         )
 
 
+    # def forward(self, text_tokens, images, **kwargs):
+    #     images = self.ViT_model(pixel_values=images)["last_hidden_state"]
+    #     print(f"Images: {images.shape}")
+
+    #     images = self.perceive(images).squeeze(1)
+    #     print(f"Images: {images.shape}")
+
+    #     images = self.image_proj(images)
+    #     print(f"images: {images}")
+
+
+    #     output = self.decoder(text_tokens)
+    #     print(f"Output shape: {output.shape}")
+    #     model_input = output[0]
+    #     print(f"Model_input {model_input}")
+
+    #     model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+    #     print(f"Model Input: {model_input.shape}")
+
+    #     model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
+    #     print(f"Model Input: {model_input.shape}")
+
+
+    #     return self.decoder(model_input, passed_x=model_input)[0]
+
+
+
+
+
+
     def forward(self, text_tokens, images, **kwargs):
-        images = self.ViT_model(pixel_values=images)["last_hidden_state"]
-        print(f"Images: {images.shape}")
-
+        images = self.clip_model(pixel_values=images)["last_hidden_state"]
         images = self.perceive(images).squeeze(1)
-        print(f"Images: {images.shape}")
-
         images = self.image_proj(images)
-        print(f"images: {images}")
 
-
-        output = self.decoder(text_tokens)
-        print(f"Output shape: {output.shape}")
-        model_input = output[0]
-        print(f"Model_input {model_input}")
-
-        model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-        print(f"Model Input: {model_input.shape}")
-
+        model_input = self.decoder(text_tokens)
+        model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
         model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
-        print(f"Model Input: {model_input.shape}")
-
 
         return self.decoder(model_input, passed_x=model_input)[0]
-
-
-
-
