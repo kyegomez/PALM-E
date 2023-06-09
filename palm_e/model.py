@@ -116,7 +116,7 @@ class PALME(nn.Module):
         images = self.perceive(images).squeeze(1)
         images = self.image_proj(images)
 
-        images_flattened = images.view(1, -1)
+        images_flattened = images_flattened.unsqueeze(0)
 
         model_input = self.decoder(text_tokens)
         print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
