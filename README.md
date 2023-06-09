@@ -21,7 +21,9 @@ An encoder for continuous observations (e.g., Vision Transformer (ViT)).
 
 A projector to map the encoder output to the language embedding space.
 
-The model processes both text and continuous observations, such as images, by encoding the observations using the chosen encoder and interleaving the encoded observations with text tokens to form multi-modal sentences. This allows PALM-E to understand and generate context-aware responses based on both textual and visual information.
+The model processes both text and continuous observations, such as images, by encoding the observations using the chosen encoder and interleaving the encoded observations with text tokens to form multi-modal sentences. 
+
+This allows PALM-E to understand and generate context-aware responses based on both textual and visual information.
 
 
 # Get Started
@@ -40,9 +42,13 @@ python3 train_distributed.py
 PALM-E's ability to process and understand multi-modal data opens up a world of possibilities in various domains, including:
 
 E-commerce: Enhance product recommendations by understanding both textual descriptions and visual features of products.
+
 Healthcare: Improve diagnostics by analyzing medical images and textual patient records simultaneously.
+
 Education: Create personalized learning experiences by understanding students' textual inputs and visual cues.
+
 Smart Cities: Optimize urban planning and resource allocation by analyzing satellite imagery and textual data from various sources.
+
 These are just a few examples of how PALM-E can revolutionize industries and improve people's lives.
 
 # Contribute to PALM-E and Make the World a Better Place
@@ -51,13 +57,20 @@ We invite you to join us in our mission to make the world a better place through
 To get started, please follow these steps:
 
 Fork the PALM-E GitHub repository.
+
 Clone the forked repository to your local machine.
+
 Install the required dependencies.
+
 Explore the code and identify areas where you can contribute.
+
 Create a new branch for your changes.
+
 Commit your changes and push them to your forked repository.
+
 Create a pull request to submit your changes for review.
-We welcome contributions in the form of bug fixes, performance improvements, new features, and documentation updates. Together, we can shape the future of AI and create a better world for everyone.
+
+We welcome contributions in any form of bug fixes, performance improvements, new features, and documentation updates. Together, we can shape the future of AI and create a better world for everyone.
 
 Thank you for your interest in PALM-E, and we look forward to collaborating with you!
 

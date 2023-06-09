@@ -3,9 +3,7 @@ from PIL import Image
 
 import torch 
 import torch.nn as nn
-from torch.optim import Adam
 from palm_rlhf_pytorch import PaLM
-# import open_clip
 
 from transformers import CLIPModel, AutoTokenizer, CLIPProcessor
 import bitsandbytes
@@ -17,24 +15,9 @@ from flamingo_pytorch import PerceiverResampler
 
 from embedding import PositionalEmbedding
 
-# vit_model, preprocess_train, preprocess_val = open_clip.create_model_and_transforms('hf-hub:laion/CLIP-ViT-H-14-laion2B-s32B-b79K')
-# tokenizer = open_clip.get_tokenizer('hf-hub:laion/CLIP-ViT-H-14-laion2B-s32B-b79K')
 
 
-
-# class ViTProjector(nn.Module):
-#     def __init__(self, vit_model, input_dim, output_dim):
-#         super(ViTProjector, self).__init__()
-#         self.vit_model = vit_model
-#         self.linear = nn.Linear(input_dim, output_dim)
-
-#     def forward(self, x):
-#         encoded_observation = self.vit_model(x)
-#         return self.linear(encoded_observation)
-
-
-
-class PALME_TOKENIZER:
+class PALME_Tokenizer:
     def __init__(self):
         self.processor = CLIPProcessor.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K")
 
@@ -109,8 +92,7 @@ class PALME(nn.Module):
 
             #embed tokens
             #embed positions
-            #output projections
-
+            #output projections????
         )
 
 

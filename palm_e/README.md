@@ -4,7 +4,9 @@ Implementation of "PaLM-E: An Embodied Multimodal Language Model"
 
 ## Summary:
 
-PALME is an embodied multimodal language model that injects continuous, embodied observations such as images, state estimates, or other sensor modalities into the language embedding space of a pre-trained language model. It uses PaLM as the pre-trained language model and makes it embodied. The inputs to PALME consist of text and continuous observations, which are interleaved to form multimodal sentences. The output is text generated autoregressively by the model, which could be an answer to a question or a sequence of decisions for a robot.
+PALME is an embodied multimodal language model that injects continuous, embodied observations such as images, state estimates, or other sensor modalities into the language embedding space of a pre-trained language model. It uses PaLM as the pre-trained language model and makes it embodied. 
+
+The inputs to PALME consist of text and continuous observations, which are interleaved to form multimodal sentences. The output is text generated autoregressively by the model, which could be an answer to a question or a sequence of decisions for a robot.
 
 ### Key Components:
 

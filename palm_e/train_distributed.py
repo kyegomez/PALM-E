@@ -12,6 +12,8 @@ from torch.distributed.fsdp import (
     BackwardPrefetch,
     ShardingStrategy,
 )
+
+from accelerate.utils import InitProcessGroupKwargs
 from datasets import concatenate_datasets, load_dataset
 from palm_rlhf_pytorch.palm import PaLM
 from palm_rlhf_pytorch.palm import LayerNorm, ParallelTransformerBlock
@@ -32,7 +34,7 @@ from transformers import (AutoTokenizer, default_data_collator,
 from stable_adamw import StableAdamWUnfused
 from palm.utils import print_num_params
 
-from model import PALME, projector
+from model import PALME, PALME_Tokenizer
 # constants
 
 
@@ -370,26 +372,15 @@ def decoupled_optimizer(
 
 
 def build_dataloaders():
-    """
-    Build data loaders for training.
-
-    This function performs the following steps:
-    1. Load the tokenizer from the pretrained "EleutherAI/gpt-neox-20b" model.
-    2. Load the "openwebtext" dataset.
-    3. Tokenize the dataset, adding the end-of-sentence token to each text.
-    4. Process the tokenized dataset into chunks of a specified block size.
-
-    Returns:
-        Dataset: The processed dataset ready for training.
-    """
-    tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neox-20b")
-    dataset = load_dataset("openwebtext", split="train")
+    tokenizer = PALME_Tokenizer.tokenize()
+    dataset = load_dataset("HuggingFaceM4/VQAv2", split="train", streaming=True)
+    remove_columns = ['question_type', 'multiple_choice_answer', 'answers', 'image_id', 'answer_type', 'question_id', 'question', 'image']
 
     tokenized_dataset = dataset.map(
         lambda example: tokenizer([t + tokenizer.eos_token for t in example["text"]]),
         batched=True,
         num_proc=CFG.NUM_CPU,
-        remove_columns=["text"],
+        remove_columns=remove_columns,
     )
 
     block_size = CFG.SEQ_LEN
@@ -415,6 +406,7 @@ def build_dataloaders():
     )
 
     return train_dataset
+
 
 
 def build_pre_tokenized():
@@ -443,7 +435,7 @@ def main():
     )
 
     accelerator.init_trackers(
-        project_name="palm",
+        project_name="palme",
         config={
             "batch_size": CFG.BATCH_SIZE,
             "gradient_accumulate_every": CFG.GRADIENT_ACCUMULATE_EVERY,
@@ -462,16 +454,7 @@ def main():
     # instantiate palm
 
     # 1B###############################################################
-    LLM = PaLM(
-        num_tokens=50304,
-        dim=2560,
-        depth=32,
-        dim_head=128,
-        heads=24,
-        flash_attn=True,
-    )
-
-    model = PALME(LLM, projector)
+    model = PALME()
 
     print_num_params(model)
 
