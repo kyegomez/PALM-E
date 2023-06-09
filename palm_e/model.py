@@ -111,17 +111,23 @@ class PALME(nn.Module):
             self.image_proj.weight, mean=0, std=2048**-0.5
         )
 
-    def forward(self, text_tokens, images, **kwargs):
-        images = self.ViT_model(pixel_values=images)["last_hidden_state"]
+    def forward(self, text_tokens, images):
+        # image projection and reshaping
         images = self.perceive(images).squeeze(1)
         images = self.image_proj(images)
-
-        images_flattened = images.view(images.size(0), -1)
-        images_flattened = images_flattened.unsqueeze(0)
-
+        images_flattened = images.view(images.size(0), -1)  # Flatten the images tensor
+        
+        # Decoder input processing
         model_input = self.decoder(text_tokens)
         print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
-        model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=1)
-        model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
-
+        
+        # Reshape the images_flattened tensor to match dimensions for concatenation
+        images_flattened = images_flattened.view(1, 2, -1) 
+        
+        # Concatenate the model_input and images tensors
+        model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+        
+        # Pass the combined tensor through the decoder
+        model_input = self.decoder.forward_embedding(model_input, tokens_mask=None)
+        
         return self.decoder(model_input, passed_x=model_input)[0]
