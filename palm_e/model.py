@@ -128,8 +128,8 @@ class PALME(nn.Module):
 
         output = self.decoder(text_tokens)
         print(f"Output shape: {output.shape}")
-        model_input = output[1]
-        print(f"Model_input {output[1]}")
+        model_input = output[0]
+        print(f"Model_input {model_input}")
 
         model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
         model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
