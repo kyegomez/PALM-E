@@ -107,6 +107,6 @@ class PALME(nn.Module):
         images_flattened = images_flattened.view(1, 2, -1) 
         model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
         
-        model_input = self.decoder.forward_embedding(model_input, tokens_mask=None)
+        model_input = self.decoder(model_input, tokens_mask=None)
         
         return self.decoder(model_input, passed_x=model_input)[0]
