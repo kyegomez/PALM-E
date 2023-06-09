@@ -120,8 +120,8 @@ class PALME(nn.Module):
         images = self.perceive(images).squeeze(1)
         images = self.image_proj(images)
 
-        model_input = self.decoder(text_tokens)[0]
-        model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+        model_input = self.decoder(text_tokens)[1]
+        model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
         model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
 
 
