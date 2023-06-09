@@ -7,7 +7,7 @@ text = "This is a sample text"
 
 
 #laod a sample image
-image_path = "PALM-E/galaxy-andromeda.jpeg"
+image_path = "galaxy-andromeda.jpeg"
 image = Image.open(image_path)
 transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
 image = transform(image)
