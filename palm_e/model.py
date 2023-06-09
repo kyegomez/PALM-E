@@ -146,7 +146,7 @@ class PALME(nn.Module):
 
 
     def forward(self, text_tokens, images, **kwargs):
-        images = self.clip_model(pixel_values=images)["last_hidden_state"]
+        images = self.ViT_model(pixel_values=images)["last_hidden_state"]
         images = self.perceive(images).squeeze(1)
         images = self.image_proj(images)
 
