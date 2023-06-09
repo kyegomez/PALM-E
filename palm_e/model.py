@@ -16,12 +16,9 @@ from flamingo_pytorch import PerceiverResampler
 from embedding import PositionalEmbedding
 
 
-
 class PALME_Tokenizer:
     def __init__(self):
         self.processor = CLIPProcessor.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K")
-
-        #maybe this will work
         self.tokenizer = AutoTokenizer.from_pretrained(
             "EleutherAI/gpt-neox-20b",
             additional_special_tokens=["<image>", "</image>"],
@@ -35,7 +32,6 @@ class PALME_Tokenizer:
 
     def tokenize_texts(self, texts):
         texts =  self.tokenizer(texts, return_tensors="pt", padding=True, truncation=True).input_ids
-        # Add image tokens to text as "<s> <image> </image> text </s>"
         image_tokens = torch.tensor([[self.im_idx, self.im_end_idx]] * texts.shape[0])
         return torch.cat([texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1), texts
 
@@ -54,9 +50,6 @@ class PALME_Tokenizer:
             "attention_mask": attention_mask,
         }
     
-
-#whisper/ llama vicuna// 
-    
 class PALME(nn.Module):
     def __init__(self):
         super(PALME, self).__init__()
@@ -68,13 +61,10 @@ class PALME(nn.Module):
             padding_idx=1
         )
 
-        
-        # Solution 2
         try:
             self.embed_positions= PositionalEmbedding(2048)
         except Exception as e:
             print(str(e))
-
 
         self.output_projection = torch.nn.Linear(
             2048, 32002, bias=False
@@ -91,10 +81,6 @@ class PALME(nn.Module):
             heads=8,
             flash_attn=True,
             qk_rmsnorm=False,
-
-            #embed tokens
-            #embed positions
-            #output projections????
         )
 
         self.perceive = PerceiverResampler(
@@ -105,29 +91,22 @@ class PALME(nn.Module):
             num_media_embeds = 257
         )
 
-
         self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
         torch.nn.init.normal_(
             self.image_proj.weight, mean=0, std=2048**-0.5
         )
 
     def forward(self, text_tokens, images):
-        # image projection and reshaping
         images = self.perceive(images).squeeze(1)
         images = self.image_proj(images)
-        images_flattened = images.view(images.size(0), -1)  # Flatten the images tensor
+        images_flattened = images.view(images.size(0), -1)  
         
-        # Decoder input processing
         model_input = self.decoder(text_tokens)
         print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
         
-        # Reshape the images_flattened tensor to match dimensions for concatenation
         images_flattened = images_flattened.view(1, 2, -1) 
-        
-        # Concatenate the model_input and images tensors
         model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
         
-        # Pass the combined tensor through the decoder
         model_input = self.decoder.forward_embedding(model_input, tokens_mask=None)
         
         return self.decoder(model_input, passed_x=model_input)[0]
