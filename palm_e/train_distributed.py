@@ -408,7 +408,7 @@ def build_dataloaders():
     return train_dataset
 
 
-
+#doesn't work
 def build_pre_tokenized():
     d0 = load_dataset("conceptofmind/c4_0-to-20_neox_with_eos_8k", split="train")
     d1 = load_dataset("conceptofmind/c4_21-to-40_neox_with_eos_8k", split="train")
