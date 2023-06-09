@@ -5,7 +5,7 @@ from PIL import Image
 #random text
 text = "This is a sample text"
 
-#
+#ddd
 #laod a sample image
 image_path = "galaxy-andromeda.jpeg"
 image = Image.open(image_path)
