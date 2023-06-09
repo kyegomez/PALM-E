@@ -25,13 +25,15 @@ class PALME_Tokenizer:
         self.tokenizer = AutoTokenizer.from_pretrained(
             "EleutherAI/gpt-neox-20b",
             additional_special_tokens=["<image>", "</image>"],
+            eos_token ="<eos>",
+            pad_token="<pad>",
             extra_ids=0,
             model_max_length=8192
         )
 
         #set padding tokemn
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenize.eos_token
+        # if self.tokenizer.pad_token is None:
+            # self.tokenizer.pad_token = self.tokenize.eos_token
 
 
         self.im_idx, self.im_end_idx = self.tokenizer.convert_tokens_to_ids(["<image>", "</image>"])
@@ -61,9 +63,8 @@ class PALME_Tokenizer:
 
     
 class PALME(nn.Module):
-    def __init__(self, LLM,  ViT_model):
+    def __init__(self):
         super(PALME, self).__init__()
-        self.LLM = LLM
         self.ViT_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
         self.embed = bitsandbytes.nn.modules.Embedding(
