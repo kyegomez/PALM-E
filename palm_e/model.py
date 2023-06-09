@@ -121,10 +121,15 @@ class PALME(nn.Module):
         images = self.image_proj(images)
 
         # model_input = self.decoder(text_tokens)[0]
-        model_input = self.decoder(text_tokens).unsqueeze(0)
-        model_input = model_input[1] # try accessing the second element
+        # model_input = self.decoder(text_tokens).unsqueeze(0)
+        # model_input = model_input[1] # try accessing the second element
 
         # print(f"Model input: {model_input.shape}")
+
+        output = self.decoder(text_tokens)
+        print(f"Output shape: {output.shape}")
+        model_input = output[1]
+        print(f"Model_input {output[1]}")
 
         model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
         model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
