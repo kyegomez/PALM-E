@@ -60,7 +60,7 @@ class PALME_Tokenizer:
         }
     
 
-
+#whisper/ llama vicuna// 
     
 class PALME(nn.Module):
     def __init__(self):
@@ -75,8 +75,8 @@ class PALME(nn.Module):
 
         self.embed_positions= PositionalEmbedding(
             2048,
-            2048,
-            1
+            # 2048
+            # 1
         )
 
         self.output_projection = torch.nn.Linear(
