@@ -74,7 +74,7 @@ class PALME(nn.Module):
         )
 
         self.embed_positions= PositionalEmbedding(
-            2048,
+            # 2048,
             # 2048
             # 1
         )
