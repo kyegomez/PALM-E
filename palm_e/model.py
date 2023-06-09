@@ -29,6 +29,10 @@ class PALME_Tokenizer:
             model_max_length=8192
         )
 
+        #set padding tokemn
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenize.eos_token
+
 
         self.im_idx, self.im_end_idx = self.tokenizer.convert_tokens_to_ids(["<image>", "</image>"])
 
