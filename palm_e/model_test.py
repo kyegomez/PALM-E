@@ -19,11 +19,8 @@ tokenizer = PALME_Tokenizer()
 tokenized_inputs = tokenizer.tokenize({"target_text": text, "image": image})
 
 
-#instantiate model
-LLM = None
-ViT_model = None
 
-model = PALME(LLM, ViT_model)
+model = PALME()
 
 
 #call the forward function and prunt the output
