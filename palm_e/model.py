@@ -68,11 +68,13 @@ class PALME(nn.Module):
             padding_idx=1
         )
 
-        self.embed_positions= PositionalEmbedding(
-            2048,
-            2048,
-            1
-        )
+        
+        # Solution 2
+        try:
+            self.embed_positions= PositionalEmbedding(2048)
+        except Exception as e:
+            print(str(e))
+
 
         self.output_projection = torch.nn.Linear(
             2048, 32002, bias=False
