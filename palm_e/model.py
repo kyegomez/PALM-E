@@ -106,11 +106,13 @@ class PALME(nn.Module):
             heads=8,
             flash_attn=True,
             qk_rmsnorm=False,
+
+            #embed tokens
+            #embed positions
+            #output projections
+
         )
 
-        #embed tokens
-        #embed positions
-        #output projections
 
         self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
         torch.nn.init.normal_(
