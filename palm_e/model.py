@@ -100,6 +100,14 @@ class PALME(nn.Module):
             #output projections????
         )
 
+        self.perceive = PerceiverResampler(
+            dim= 1024,
+            depth = 2,
+            dim_head = 8,
+            num_latents = 64,
+            num_media_embeds = 257
+        )
+
 
         self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
         torch.nn.init.normal_(
@@ -115,6 +123,9 @@ class PALME(nn.Module):
         model_input = self.decoder.forward_embeddings(text_tokens)[1]
         model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
         model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
+
+
+        return self.decoder(model_input, passed_x=model_input)[0]
 
 
 
