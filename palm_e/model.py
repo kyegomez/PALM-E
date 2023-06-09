@@ -31,11 +31,6 @@ class PALME_Tokenizer:
             model_max_length=8192
         )
 
-        #set padding tokemn
-        # if self.tokenizer.pad_token is None:
-            # self.tokenizer.pad_token = self.tokenize.eos_token
-
-
         self.im_idx, self.im_end_idx = self.tokenizer.convert_tokens_to_ids(["<image>", "</image>"])
 
     def tokenize_texts(self, texts):
@@ -74,9 +69,9 @@ class PALME(nn.Module):
         )
 
         self.embed_positions= PositionalEmbedding(
-            # 2048,
-            # 2048
-            # 1
+            2048,
+            2048,
+            1
         )
 
         self.output_projection = torch.nn.Linear(
@@ -113,37 +108,6 @@ class PALME(nn.Module):
         torch.nn.init.normal_(
             self.image_proj.weight, mean=0, std=2048**-0.5
         )
-
-
-    # def forward(self, text_tokens, images, **kwargs):
-    #     images = self.ViT_model(pixel_values=images)["last_hidden_state"]
-    #     print(f"Images: {images.shape}")
-
-    #     images = self.perceive(images).squeeze(1)
-    #     print(f"Images: {images.shape}")
-
-    #     images = self.image_proj(images)
-    #     print(f"images: {images}")
-
-
-    #     output = self.decoder(text_tokens)
-    #     print(f"Output shape: {output.shape}")
-    #     model_input = output[0]
-    #     print(f"Model_input {model_input}")
-
-    #     model_input = torch.stack([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-    #     print(f"Model Input: {model_input.shape}")
-
-    #     model_input = self.decoder.forward_embedding(model_input, token_embedding=model_input)[0]
-    #     print(f"Model Input: {model_input.shape}")
-
-
-    #     return self.decoder(model_input, passed_x=model_input)[0]
-
-
-
-
-
 
     def forward(self, text_tokens, images, **kwargs):
         images = self.ViT_model(pixel_values=images)["last_hidden_state"]
