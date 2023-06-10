@@ -98,7 +98,7 @@ class PALME(nn.Module):
         )
 
     def forward(self, text_tokens, images):
-        images = self.perceive(images)#.squeeze(1)
+        images = self.perceive(images).squeeze(1)
         print(f"Images perceive: {images}")
 
         images = self.image_proj(images)
