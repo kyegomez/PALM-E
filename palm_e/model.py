@@ -98,15 +98,26 @@ class PALME(nn.Module):
                 self.output_projection.weight, mean=0, std=2048**-0.5
             )
 
+            # self.decoder = PaLM(
+            #     num_tokens=50304,
+            #     dim=2048,
+            #     depth=16,
+            #     dim_head=128,
+            #     heads=8,
+            #     flash_attn=True,
+            #     qk_rmsnorm=False,
+            # )
+
             self.decoder = PaLM(
                 num_tokens=50304,
                 dim=2048,
-                depth=16,
+                depth=8,
                 dim_head=128,
-                heads=8,
+                heads=4,
                 flash_attn=True,
                 qk_rmsnorm=False,
             )
+
 
             self.perceive = PerceiverResampler(
                 dim= 1024,
