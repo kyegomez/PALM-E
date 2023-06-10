@@ -29,4 +29,4 @@ output = model.forward(
     images = tokenized_inputs["images"]
 )
 
-print(output)
+print(f'output: {output}')
