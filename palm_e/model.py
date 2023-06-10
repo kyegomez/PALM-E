@@ -84,14 +84,14 @@ class PALME(nn.Module):
         )
 
         self.perceive = PerceiverResampler(
-            dim= 224,
+            dim= 1024,
             depth = 2,
             dim_head = 8,
             num_latents = 64,
             num_media_embeds = 257
         )
 
-        self.image_proj = torch.nn.Linear(224, 2048, bias=False)
+        self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
         torch.nn.init.normal_(
             self.image_proj.weight, mean=0, std=2048**-0.5
         )
