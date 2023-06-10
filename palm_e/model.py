@@ -62,7 +62,7 @@ class PALME(nn.Module):
         )
 
         try:
-            self.embed_positions= PositionalEmbedding(2048, 2048, 1)
+            self.embed_positions = PositionalEmbedding()
         except Exception as e:
             print(str(e))
 
@@ -97,7 +97,7 @@ class PALME(nn.Module):
         )
 
     def forward(self, text_tokens, images):
-        images = self.perceive(images).squeeze(1)
+        images = self.perceive(images)#.squeeze(1)
         images = self.image_proj(images)
         images_flattened = images.view(images.size(0), -1)  
         

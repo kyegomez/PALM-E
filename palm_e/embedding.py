@@ -1,4 +1,7 @@
-import torch 
+# Copyright (c) 2022 Microsoft
+# Licensed under The MIT License [see LICENSE for details]
+
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -12,29 +15,28 @@ class VisionLanguageEmbedding(nn.Module):
     def forward(self, textual_tokens, visual_tokens, **kwargs):
         if textual_tokens is None:
             return self.vision_embed(visual_tokens)
-        
+
         if visual_tokens is None:
             return self.text_embed(textual_tokens)
-        
 
         x1 = self.vision_embed(visual_tokens)
         x2 = self.text_embed(textual_tokens)
 
         return torch.cat([x1, x2], dim=1)
-    
+
 
 class VisionEmbedding(nn.Module):
-    #image to patch embedding
+    """Image to Patch Embedding"""
 
     def __init__(
-            self,
-            img_size=1024,
-            patch_size=16,
-            in_chans=3,
-            embed_dim=768,
-            contain_mask_token=False,
-            prepend_cls_token=False
-        ):
+        self,
+        img_size=1024,
+        patch_size=16,
+        in_chans=3,
+        embed_dim=768,
+        contain_mask_token=False,
+        prepend_cls_token=False,
+    ):
         super().__init__()
         img_size = (img_size, img_size)
         patch_size = (patch_size, patch_size)
@@ -50,7 +52,6 @@ class VisionEmbedding(nn.Module):
 
         if contain_mask_token:
             self.mask_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
-
         else:
             self.mask_token = None
 
@@ -62,16 +63,14 @@ class VisionEmbedding(nn.Module):
     def num_position_embeddings(self):
         if self.cls_token is None:
             return self.num_patches
-        
         else:
             return self.num_patches + 1
-        
 
     def forward(self, x, masked_position=None, **kwargs):
         B, C, H, W = x.shape
         assert (
             H == self.img_size[0] and W == self.img_size[1]
-        ), f'Input Image size ({H}*{W}) does not match ({self.img_size[0]} * {self.img_size[1]})'
+        ), f"Input image size ({H}*{W}) doesn't match model ({self.img_size[0]}*{self.img_size[1]})."
         x = self.proj(x).flatten(2).transpose(1, 2)
 
         batch_size, seq_len, _ = x.size()
@@ -80,30 +79,32 @@ class VisionEmbedding(nn.Module):
             assert self.mask_token is not None
             mask_token = self.mask_token.expand(batch_size, seq_len, -1)
             w = masked_position.unsqueeze(-1).type_as(mask_token)
-            x = x * (1 - w) + mask_token * W
+            x = x * (1 - w) + mask_token * w
 
         if self.cls_token is not None:
             cls_tokens = self.cls_token.expand(
-                batch_size, -1, -1 
-            ) #stole cls tokens impl from phil wang thanks!!
+                batch_size, -1, -1
+            )  # stole cls_tokens impl from Phil Wang, thanks
             x = torch.cat((cls_tokens, x), dim=1)
 
         return x
-    
+
+
 class TextEmbedding(nn.Embedding):
     def reset_parameters(self):
         nn.init.normal_(self.weight, mean=0, std=self.embedding_dim**-0.5)
         self._fill_padding_idx_with_zero()
 
-class PositionalEmbedding(nn.Module):
+
+class PositionalEmbedding(nn.Embedding):
     def forward(
-            self,
-            x,
-            positions=None,
-            **kwargs
-        ):
+        self,
+        x,
+        positions=None,
+        **kwargs,
+    ):
         if positions is None:
-            #bing consistent with fairseq
+            # being consistent with Fairseq, which starts from 2.
             positions = (
                 torch.arange(2, x.size(1) + 2, device=x.device).long().unsqueeze(0)
             )
