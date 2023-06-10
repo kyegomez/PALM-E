@@ -34,7 +34,8 @@ from transformers import (AutoTokenizer, default_data_collator,
 # from PaLM.palm.stable_adamw import StableAdamWUnfused
 from stable_adamw import StableAdamWUnfused
 
-from palm.utils import print_num_params
+# from palm.utils import print_num_params
+from utils import print_num_params
 
 from model import PALME, PALME_Tokenizer
 # constants
