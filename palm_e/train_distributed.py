@@ -31,7 +31,9 @@ from transformers import (AutoTokenizer, default_data_collator,
                           get_cosine_schedule_with_warmup,
                           get_linear_schedule_with_warmup, set_seed)
 
-from PaLM.palm.stable_adamw import StableAdamWUnfused
+# from PaLM.palm.stable_adamw import StableAdamWUnfused
+from stable_adamw import StableAdamWUnfused
+
 from palm.utils import print_num_params
 
 from model import PALME, PALME_Tokenizer
