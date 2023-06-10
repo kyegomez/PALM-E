@@ -108,12 +108,19 @@ class PALME(nn.Module):
             num_media_embeds = 257
         )
 
+        self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
+
         self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
         torch.nn.init.normal_(
             self.image_proj.weight, mean=0, std=2048**-0.5
         )
 
     def forward(self, text_tokens, images):
+        images = images.view(images.size(0), -1)#flatten the images
+        images = self.image_resize(images)#resize the images
+        images = images.view(images.size(0), 3, 1024, 1024)
+
+        
         images = self.perceive(images).squeeze(1)
         print(f"Images perceive: {images}")
 
