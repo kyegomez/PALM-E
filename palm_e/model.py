@@ -36,7 +36,8 @@ class PALME_Tokenizer:
         return torch.cat([texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1), texts
 
     def tokenize_images(self, images):
-        return self.processor(images=images, return_tensors="pt").pixel_values
+        tokenized_images = self.processor(images=images, return_tensors="pt").pixel_values
+        print(f"tokenized_image: {tokenized_images.shape}")
 
     def tokenize(self, sample):
         text_tokens, only_text_tokens = self.tokenize_texts(sample["target_text"])
@@ -98,15 +99,24 @@ class PALME(nn.Module):
 
     def forward(self, text_tokens, images):
         images = self.perceive(images)#.squeeze(1)
+        print(f"Images perceive: {images}")
+
         images = self.image_proj(images)
+        print(f"Images projected: {images}")
+
         images_flattened = images.view(images.size(0), -1)  
-        
+        print(f"Images flattened: {images_flattened}")
+
         model_input = self.decoder(text_tokens)
         print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
         
         images_flattened = images_flattened.view(1, 2, -1) 
+        print(f"Images flattened: {images_flattened}")
+
         model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+        print(f"Model input: {model_input}")
         
         model_input = self.decoder(model_input, tokens_mask=None)
+        print(f"Model input: {model_input}")
         
         return self.decoder(model_input, passed_x=model_input)[0]
