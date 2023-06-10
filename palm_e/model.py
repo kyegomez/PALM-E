@@ -40,7 +40,7 @@ class PALME_Tokenizer:
         images_np = [image.numpy() for image in images]
 
         # Resize the images to 1024x1024
-        resized_images = [Image.fromarray(image).resize((1024, 1024)) for image in images_np]
+        resized_images = [Image.fromarray(image).resize((1024, 1024)).convert("RGB") for image in images_np]
 
         # Convert the resized images back to numpy arrays
         resized_images_np = [np.array(image) for image in resized_images]
