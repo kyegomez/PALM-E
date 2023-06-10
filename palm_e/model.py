@@ -14,7 +14,7 @@ from flamingo_pytorch import PerceiverResampler
 
 
 from embedding import PositionalEmbedding
-from numpy import np
+import numpy as np
 
 class PALME_Tokenizer:
     def __init__(self):
