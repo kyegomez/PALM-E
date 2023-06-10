@@ -14,7 +14,7 @@ from flamingo_pytorch import PerceiverResampler
 
 
 from embedding import PositionalEmbedding
-
+from numpy import np
 
 class PALME_Tokenizer:
     def __init__(self):
@@ -36,15 +36,22 @@ class PALME_Tokenizer:
         return torch.cat([texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1), texts
 
     def tokenize_images(self, images):
-        #resize the images to 1024 to 1024
-        resized_images = [Image.fromarray(images).resize(1024, 1024) for image in images]
+        # Convert the images tensor to a list of numpy arrays
+        images_np = [image.numpy() for image in images]
 
-        #convert the resized images backt o numpy arrays
-        resized_images_np = [np.array(images) for image in resized_images ]
+        # Resize the images to 1024x1024
+        resized_images = [Image.fromarray(image).resize((1024, 1024)) for image in images_np]
 
-        #tokenize the resized images
+        # Convert the resized images back to numpy arrays
+        resized_images_np = [np.array(image) for image in resized_images]
+
+        # Tokenize the resized images
         tokenized_images = self.processor(images=resized_images_np, return_tensors="pt").pixel_values
         print(f"tokenized_image: {tokenized_images.shape}")
+
+        #tokenize the resized images
+        # tokenized_images = self.processor(images=images, return_tensors="pt").pixel_values
+        # print(f"tokenized_image: {tokenized_images.shape}")
 
     def tokenize(self, sample):
         text_tokens, only_text_tokens = self.tokenize_texts(sample["target_text"])
