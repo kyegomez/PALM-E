@@ -49,6 +49,8 @@ class PALME_Tokenizer:
         tokenized_images = self.processor(images=resized_images_np, return_tensors="pt").pixel_values
         print(f"tokenized_image: {tokenized_images.shape}")
 
+        return tokenized_images
+
         #tokenize the resized images
         # tokenized_images = self.processor(images=images, return_tensors="pt").pixel_values
         # print(f"tokenized_image: {tokenized_images.shape}")
