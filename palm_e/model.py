@@ -120,7 +120,7 @@ class PALME(nn.Module):
         images = self.image_resize(images)#resize the images
         images = images.view(images.size(0), 3, 1024, 1024)
 
-        
+
         images = self.perceive(images).squeeze(1)
         print(f"Images perceive: {images}")
 
@@ -142,4 +142,8 @@ class PALME(nn.Module):
         model_input = self.decoder(model_input, tokens_mask=None)
         print(f"Model input: {model_input}")
         
-        return self.decoder(model_input, passed_x=model_input)[0]
+        output =  self.decoder(model_input, passed_x=model_input)[0]
+        
+        print(f"output: {output}")
+
+        return output
