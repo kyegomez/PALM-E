@@ -39,6 +39,7 @@ from utils import print_num_params
 
 from model import PALME, PALME_Tokenizer
 # constants
+from accelerate import Accelerator
 
 
 class CFG:
