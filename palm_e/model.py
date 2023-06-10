@@ -62,7 +62,7 @@ class PALME(nn.Module):
         )
 
         try:
-            self.embed_positions = PositionalEmbedding()
+            self.embed_positions = PositionalEmbedding(2048, 2048, 1)
         except Exception as e:
             print(str(e))
 
