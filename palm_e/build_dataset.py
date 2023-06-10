@@ -81,7 +81,7 @@ def main(args):
     train_tokenized_dataset = train_dataset.map(
         prep_and_group_texts,
         batched=True,
-        num_proc=CFG.NUM_CPU,
+        # num_proc=CFG.NUM_CPU,
     )
     
 
