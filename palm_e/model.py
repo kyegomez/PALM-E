@@ -1,20 +1,12 @@
-import re
-from PIL import Image
 
-import torch 
-import torch.nn as nn
-from palm_rlhf_pytorch import PaLM
-
-from transformers import CLIPModel, AutoTokenizer, CLIPProcessor
 import bitsandbytes
-
-
-from flamingo_pytorch import PerceiverResampler
-
-
-
+import torch
+import torch.nn as nn
 from embedding import PositionalEmbedding
-import numpy as np
+from flamingo_pytorch import PerceiverResampler
+from palm_rlhf_pytorch import PaLM
+from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
+
 
 class PALME_Tokenizer:
     def __init__(self):
