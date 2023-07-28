@@ -1,10 +1,11 @@
-import multiprocessing
 import argparse
+import multiprocessing
 from itertools import chain
-from datasets import load_dataset
-from transformers import AutoTokenizer
-from model import PALME_Tokenizer
+
 import torch
+from datasets import load_dataset
+from model import PALMETokenizer
+
 
 class CFG:
     SEED: int = 42
@@ -35,23 +36,10 @@ def prep_sample(sample):
 
 
 def main(args):
-    tokenizer = PALME_Tokenizer()
+    tokenizer = PALMETokenizer()
 
     train_dataset = load_dataset(CFG.DATASET_NAME, split="train", streaming=True)
 
-    # def tokenize_function(example):
-    #     return tokenizer([t + tokenizer.eos_token for t in example["text"]])
-
-    # tokenized_dataset = train_dataset.map(
-    #     tokenize_function,
-    #     batched=True,
-    #     num_proc=CFG.NUM_CPU,
-    #     remove_columns=["text"],
-    # )
-
-    # block_size = CFG.SEQ_LEN
-
-    # Main data processing function that will concatenate all texts from our dataset and generate chunks of block_size.
     def prep_and_group_texts(samples):
         processed_samples = []
         for sample in samples:

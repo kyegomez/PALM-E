@@ -8,7 +8,7 @@ from palm_rlhf_pytorch import PaLM
 from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
 
 
-class PALME_Tokenizer:
+class PALMETokenizer:
     def __init__(self):
         try:
 

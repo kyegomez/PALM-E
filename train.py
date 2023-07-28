@@ -10,11 +10,9 @@ import torch
 # constants
 from accelerate import Accelerator
 from accelerate.utils import InitProcessGroupKwargs
-from datasets import concatenate_datasets, load_dataset
-
+from datasets import load_dataset
+from lion_pytorch import Lion
 from palm_rlhf_pytorch.palm import LayerNorm, ParallelTransformerBlock
-
-# from PaLM.palm.stable_adamw import StableAdamWUnfused
 from torch.distributed.algorithms._checkpoint.checkpoint_wrapper import (
     CheckpointImpl,
     apply_activation_checkpointing,
@@ -33,33 +31,52 @@ from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import (
+    AutoTokenizer,
     default_data_collator,
     get_cosine_schedule_with_warmup,
     get_linear_schedule_with_warmup,
     set_seed,
 )
 
+from palme.stable_adamw import StableAdamWUnfused
 # from palm.utils import print_num_params
 from palme.utils import print_num_params
-from palme.model import PALME_Tokenizer, PALME
-from palme.stable_adamw import StableAdamWUnfused
+from palme.model import PALME
+
+
+# setup 
+import torch.distributed as dist
+from accelerate.logging import get_logger
+logger = get_logger(__name__, log_level="INFO")
+
+
 
 class CFG:
-    BATCH_SIZE: int = 2
-    GRADIENT_ACCUMULATE_EVERY: int = 2
+    BATCH_SIZE = 1
+    GRADIENT_ACCUMULATE_EVERY: int = 1
     SEED: int = 42
-    LEARNING_RATE: float = 1.6e-4
+    LEARNING_RATE: float = 1e-4 #3e-4 # 1e-4 for lion
     WEIGHT_DECAY: float = 0.1
     SEQ_LEN: int = 8192
     NUM_CPU: int = multiprocessing.cpu_count()
     USE_DEEPSPEED: bool = True
-    USE_FSDP: bool = False
+    USE_FSDP: bool = True
     USE_PRETOKENIZED: bool = True
-    USE_ACTIVATION_CHECKPOINTING: bool = False
-    RESUME_FROM_CHECKPOINT: str = "/step_55800"
-    CHECKPOINTING_STEPS: int = 100
-    OUTPUT_DIR: str = "/save_dir"
-    ENTITY_NAME: str = "a_man_chooses"
+    USE_ACTIVATION_CHECKPOINTING: bool = True
+    RESUME_FROM_CHECKPOINT: str = False
+    CHECKPOINTING_STEPS: int = 1000
+    OUTPUT_DIR: str = 'checkpoints/' # Folder
+    ENTITY_NAME: str = "PALME"
+    LOGGING_STEPS: int = 100
+
+
+# helpers
+
+
+def print_num_params(model, accelerator: Accelerator):
+    # n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    accelerator.print(f"Number of parameters in model: {n_params}")
 
 
 # activation checkpointing
@@ -118,14 +135,14 @@ def fsdp(
         torch.nn.Module: The input model wrapped with FSDP.
     """
     if auto_wrap:
-        palm_auto_wrap_policy = partial(
+        PALME_auto_wrap_policy = partial(
             transformer_auto_wrap_policy,
             transformer_layer_cls={
                 ParallelTransformerBlock,
             },
         )
     else:
-        palm_auto_wrap_policy = None
+        PALME_auto_wrap_policy = None
 
     if mp == "bf16":
         mp_fsdp = MixedPrecision(
@@ -173,7 +190,7 @@ def fsdp(
 
     model = FullyShardedDataParallel(
         model,
-        auto_wrap_policy=palm_auto_wrap_policy,
+        auto_wrap_policy=PALME_auto_wrap_policy,
         mixed_precision=mp_fsdp,
         backward_prefetch=BackwardPrefetch.BACKWARD_PRE,
         sharding_strategy=sharding_strat_fsdp,
@@ -192,7 +209,7 @@ def get_lr_scheduler_with_warmup(
     scheduler_type: str,
     num_warmup_steps: int,
     max_train_steps: int,
-    grad_accumulate_every: int = 2,
+    grad_accumulate_every: int = 1,
     accelerator: Accelerator = None,
 ):
     """
@@ -245,8 +262,8 @@ def decoupled_optimizer(
     weight_decay: float,
     beta_1: float,
     beta_2: float,
-    optimizer_type: str = "deepspeed",
-    use_fsdp: bool = False,
+    optimizer_type: str,
+    use_fsdp: bool = True,
     accelerator: Accelerator = None,
 ):
     """
@@ -277,7 +294,6 @@ def decoupled_optimizer(
     param_dict = {}
     # Iterate over the model's named parameters and populate the param_dict with key-value pairs.
     for param_name, param in model.named_parameters():
-        print(param_name)
         param_dict[param_name] = param
 
     # Separate the model's named modules into two groups: decay and no_decay.
@@ -288,7 +304,7 @@ def decoupled_optimizer(
     if use_fsdp:
         exclude_module = "_fsdp_wrapped_module.token_emb"
     else:
-        exclude_module = "module.token_emb"
+        exclude_module = "token_emb"
 
     # Iterate through the named modules of the model.
     for module_name, module in model.named_modules():
@@ -327,7 +343,7 @@ def decoupled_optimizer(
     if use_fsdp:
         exclude_param = "_fsdp_wrapped_module.to_logits.weight"
     else:
-        exclude_param = "module.to_logits.weight"
+        exclude_param = "to_logits.weight"
 
     # Iterate over the decay list, which contains the names of the parameters with weight decay.
     for param in decay:
@@ -342,8 +358,13 @@ def decoupled_optimizer(
 
     # Iterate over the no_decay list, which contains the names of the parameters without weight decay.
     for param in no_decay:
-        # Append the corresponding parameter from param_dict to the no_decay_param list.
-        no_decay_param.append(param_dict[param])
+        try:
+                
+            # Append the corresponding parameter from param_dict to the no_decay_param list.
+            no_decay_param.append(param_dict[param])
+        except KeyError:
+            # print(f"Parameter {param_name} does not exist in the model")
+            pass
 
     # Create a list called grouped_params that contains two dictionaries.
     # The first dictionary has the decay_param list and the corresponding weight_decay value.
@@ -358,12 +379,16 @@ def decoupled_optimizer(
         optimizer = Lion(grouped_params, lr=learning_rate, betas=(beta_1, beta_2),)
     elif optimizer_type == "adamw":
         optimizer = AdamW(grouped_params, lr=learning_rate, betas=(beta_1, beta_2),)
-    elif optimizer_type == "deepspeed":
-        optimizer = DummyOptim(grouped_params, lr=learning_rate, betas=(beta_1, beta_2),)
+    # elif optimizer_type == "deepspeed":
+    #     optimizer = DummyOptim(grouped_params, lr=learning_rate, betas=(beta_1, beta_2),)
     elif optimizer_type == "stable_adamw":
         optimizer = StableAdamWUnfused(
             grouped_params, lr=learning_rate, betas=(beta_1, beta_2),
         )
+    # elif optimizer_type=="Adam8bit":
+    #     optimizer = bnb.optim.Adam8bit(grouped_params, lr=learning_rate, betas=(beta_1, beta_2))
+    # elif optimizer_type=="Lion8Bit":
+    #     optimizer = bnb.optim.Lion8bit(grouped_params, lr=learning_rate, betas=(beta_1, beta_2))
     else:
         raise ValueError(
             "Invalid optimizer_type. Expected 'lion', 'adamw', 'deepspeed' or 'stable_adamw', got: {}".format(
@@ -379,15 +404,26 @@ def decoupled_optimizer(
 
 
 def build_dataloaders():
-    tokenizer = PALME_Tokenizer.tokenize()
-    dataset = load_dataset("HuggingFaceM4/VQAv2", split="train", streaming=True)
-    remove_columns = ['question_type', 'multiple_choice_answer', 'answers', 'image_id', 'answer_type', 'question_id', 'question', 'image']
+    """
+    Build data loaders for training.
+
+    This function performs the following steps:
+    1. Load the tokenizer from the pretrained "EleutherAI/gpt-neox-20b" model.
+    2. Load the "openwebtext" dataset.
+    3. Tokenize the dataset, adding the end-of-sentence token to each text.
+    4. Process the tokenized dataset into chunks of a specified block size.
+
+    Returns:
+        Dataset: The processed dataset ready for training.
+    """
+    tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neox-20b")
+    dataset = load_dataset("openwebtext", split="train")
 
     tokenized_dataset = dataset.map(
         lambda example: tokenizer([t + tokenizer.eos_token for t in example["text"]]),
         batched=True,
         num_proc=CFG.NUM_CPU,
-        remove_columns=remove_columns,
+        remove_columns=["text"],
     )
 
     block_size = CFG.SEQ_LEN
@@ -414,42 +450,43 @@ def build_dataloaders():
 
     return train_dataset
 
-
-#doesn't work
+#switch to falconwebdataset
 def build_pre_tokenized():
-    d0 = load_dataset("conceptofmind/c4_0-to-20_neox_with_eos_8k", split="train")
-    d1 = load_dataset("conceptofmind/c4_21-to-40_neox_with_eos_8k", split="train")
-    d2 = load_dataset("conceptofmind/c4_41-to-60_neox_with_eos_8k", split="train")
-    d3 = load_dataset("conceptofmind/c4_61-to-80_neox_with_eos_8k", split="train")
-    d4 = load_dataset("conceptofmind/c4_81-to-100_neox_with_eos_8k", split="train")
-    train_dataset = concatenate_datasets([d0, d1, d2, d3, d4])
-    return train_dataset
+    d0 = load_dataset("conceptofmind/c4_0-to-20_neox_with_eos_8k", split="train[:10]")
+    # d1 = load_dataset("conceptofmind/c4_21-to-40_neox_with_eos_8k", split="train")
+    # d2 = load_dataset("conceptofmind/c4_41-to-60_neox_with_eos_8k", split="train")
+    # d3 = load_dataset("conceptofmind/c4_61-to-80_neox_with_eos_8k", split="train")
+    # d4 = load_dataset("conceptofmind/c4_81-to-100_neox_with_eos_8k", split="train")
+    # train_dataset = concatenate_datasets([d0, d1, d2, d3, d4])
+    return d0
 
 
-# main
 
-
-def main():
+def Train():
     # accelerator
 
     timeout = InitProcessGroupKwargs(timeout=timedelta(seconds=1_000_000))
 
     accelerator = Accelerator(
         gradient_accumulation_steps=CFG.GRADIENT_ACCUMULATE_EVERY,
-        mixed_precision="bf16",
+        mixed_precision="fp16",
         log_with="wandb",
         kwargs_handlers=[timeout],
     )
 
+    # state = AcceleratorState()
+    
+    # state.deepspeed_plugin.deepspeed_config['train_micro_batch_size_per_gpu'] = CFG.BATCH_SIZE #??????
+
     accelerator.init_trackers(
-        project_name="palme",
+        project_name="PALME",
         config={
             "batch_size": CFG.BATCH_SIZE,
             "gradient_accumulate_every": CFG.GRADIENT_ACCUMULATE_EVERY,
             "learning_rate": CFG.LEARNING_RATE,
             "seq_len": CFG.SEQ_LEN,
         },
-        init_kwargs={"wandb": {"entity": CFG.ENTITY_NAME}},
+        # init_kwargs={"wandb": {"entity": CFG.ENTITY_NAME}},
     )
 
     accelerator.print(f"Total GPUS: {accelerator.num_processes}")
@@ -458,19 +495,14 @@ def main():
 
     set_seed(CFG.SEED)
 
-    # instantiate palm
-
-    # 1B###############################################################
     model = PALME()
 
-    print_num_params(model)
-
-    #######
+    print_num_params(model, accelerator)
 
     if CFG.USE_FSDP:
         model = fsdp(
             model,
-            mp="bf16",
+            mp="fp16",
             shard_strat="SHARD_GRAD"
         )
 
@@ -490,16 +522,16 @@ def main():
         train_dataset, batch_size=CFG.BATCH_SIZE, collate_fn=default_data_collator,
     )
 
-    # optimizer
 
+    # optimizer
     optim = decoupled_optimizer(
         model=model,
         learning_rate=CFG.LEARNING_RATE, 
         weight_decay=CFG.WEIGHT_DECAY, 
         beta_1=0.90, 
         beta_2=0.95, 
-        optimizer_type='deepspeed',  
-        use_fsdp=False,
+        optimizer_type='lion',  
+        use_fsdp=True,
         accelerator=accelerator
     )
 
@@ -561,7 +593,7 @@ def main():
         # need to multiply `gradient_accumulation_steps` to reflect real steps
         resume_step = (
             int(training_difference.replace("step_", ""))
-            #* CFG.GRADIENT_ACCUMULATE_EVERY
+            * CFG.GRADIENT_ACCUMULATE_EVERY
         )
 
     if CFG.RESUME_FROM_CHECKPOINT and resume_step is not None:
@@ -601,6 +633,12 @@ def main():
         if completed_steps >= max_train_steps:
             break
 
+        #logging every CFG.LOGGING STEPS
+        if CFG.LOGGING_STEPS > 0 and step % CFG.LOGGING_STEPS == 0:
+            logger.info(
+                f"Step: {completed_steps}/{max_train_steps}, Loss: {loss.item():.5f}"
+            )
+
     # end training
 
     # accelerator.print(f"Training Finished")
@@ -618,5 +656,20 @@ def main():
             )
 
 
-if __name__ == "__main__":
+def main():
+    os.environ['MASTER_ADDR'] #'localhost'
+    os.environ['MASTER_PORT'] #= '9994'
+    
+    # # [CRITICAL] Pay attention to this when scaling to multiple GPUs and clusters
+    
+    # # Pay attention to this, use "accelerate config"
+
+    os.environ['RANK']       #= str(0) # Number of nodes (servers)
+    os.environ['WORLD_SIZE'] # = str(torch.cuda.device_count())
+
+    dist.init_process_group(backend='nccl') #init_method="env://")
+    
+    Train()
+
+if __name__ == '__main__':
     main()
