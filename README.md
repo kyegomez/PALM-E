@@ -5,6 +5,38 @@ This implementation of PALM-E is brought to you by Agora, we're a collective of 
 
 # PALM-E: A Revolutionary Multi-Modal AI Model
 
+<div align="center">
+
+
+[![GitHub issues](https://img.shields.io/github/issues/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/issues) [![GitHub forks](https://img.shields.io/github/forks/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/network) [![GitHub stars](https://img.shields.io/github/stars/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/stargazers) [![GitHub license](https://img.shields.io/github/license/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/blob/master/LICENSE)
+
+</div>
+
+<div align="center">
+
+[![Share on Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Share%20%40kyegomez/PALM-E)](https://twitter.com/intent/tweet?text=Excited%20to%20introduce%20PALM-E,%20the%20all-new%20robotics%20model%20with%20the%20potential%20to%20revolutionize%20automation.%20Join%20us%20on%20this%20journey%20towards%20a%20smarter%20future.%20%23RT1%20%23Robotics&url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E)
+
+[![Share on Facebook](https://img.shields.io/badge/Share-%20facebook-blue)](https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E)
+
+[![Share on LinkedIn](https://img.shields.io/badge/Share-%20linkedin-blue)](https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E&title=Introducing%20PALM-E%2C%20the%20All-New%20Robotics%20Model&summary=PALM-E%20is%20the%20next-generation%20robotics%20model%20that%20promises%20to%20transform%20industries%20with%20its%20intelligence%20and%20efficiency.%20Join%20us%20to%20be%20a%20part%20of%20this%20revolutionary%20journey%20%23RT1%20%23Robotics&source=)
+
+</div>
+
+<div align="center">
+
+![Join the Agora discord](https://img.shields.io/discord/1110910277110743103?label=Discord&logo=discord&logoColor=white&style=plastic&color=d7b023)
+
+[![Share on Reddit](https://img.shields.io/badge/-Share%20on%20Reddit-orange)](https://www.reddit.com/submit?url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E&title=Exciting%20Times%20Ahead%20with%20PALM-E%2C%20the%20All-New%20Robotics%20Model%20%23RT1%20%23Robotics) [![Share on Hacker News](https://img.shields.io/badge/-Share%20on%20Hacker%20News-orange)](https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E&t=Exciting%20Times%20Ahead%20with%20PALM-E%2C%20the%20All-New%20Robotics%20Model%20%23RT1%20%23Robotics)
+
+[![Share on Pinterest](https://img.shields.io/badge/-Share%20on%20Pinterest-red)](https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E&media=https%3A%2F%2Fexample.com%2Fimage.jpg&description=PALM-E%2C%20the%20Revolutionary%20Robotics%20Model%20that%20will%20Change%20the%20Way%20We%20Work%20%23RT1%20%23Robotics)
+
+[![Share on WhatsApp](https://img.shields.io/badge/-Share%20on%20WhatsApp-green)](https://api.whatsapp.com/send?text=I%20just%20discovered%20PALM-E,%20the%20all-new%20robotics%20model%20that%20promises%20to%20revolutionize%20automation.%20Join%20me%20on%20this%20exciting%20journey%20towards%20a%20smarter%20future.%20%23RT1%20%23Robotics%0A%0Ahttps%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E)
+
+</div>
+
+---
+
+
 [PaLM-E: An Embodied Multimodal Language Model](https://arxiv.org/pdf/2303.03378v1.pdf)
 
 PALM-E is an innovative multi-modal AI model that combines the power of pre-trained language models with continuous observation encoders, such as Vision Transformers (ViT). 
