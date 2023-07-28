@@ -32,6 +32,10 @@ PALM-E processes both text and continuous observations, such as images, and form
 
 Clone the repository and install the required packages.
 
+```
+pip install palme
+```
+
 ```sh
 git clone https://github.com/kyegomez/PALM-E.git
 cd palm_e
@@ -47,7 +51,7 @@ pip install git+https://github.com/kyegomez/PALM-E.git
 Then, run the training script:
 
 ```sh
-python3 train_distributed.py
+python3 train.py
 ```
 
 ## Commercial Use Cases
