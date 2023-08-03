@@ -1,11 +1,11 @@
-torch>=2.0.0
+torch
 palm-rlhf-pytorch
 transformers
 datasets
 tokenizers
 hidet
 wandb
-
+lion-pytorch
 
 bitsandbytes
 flamingo_pytorch
