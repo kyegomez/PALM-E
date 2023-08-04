@@ -16,7 +16,7 @@ setup(
     'transformers'
   ],
   install_requires=[
-    "torch"
+    "torch",
     "lion-pytorch",
     "numpy",
     "einops",
