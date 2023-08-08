@@ -121,7 +121,7 @@ class PALME(nn.Module):
             # images = self.image_resize(images)  # Resize the images using the linear transformation layer
             # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
 
-            images = self.clip_model(pixel_values=images)["last_hidden_state"]
+            images = self.vit_model(pixel_values=images)["last_hidden_state"]
             images = self.perceive(images).squeeze(1)
             images = self.image_proj(images)
 
