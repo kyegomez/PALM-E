@@ -117,20 +117,14 @@ class PALME(nn.Module):
     def forward(self, text_tokens, images):
         try:
                 
-            # images = images.view(images.size(0), -1)  # Flatten the images
-            # images = self.image_resize(images)  # Resize the images using the linear transformation layer
-            # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
-
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             images = self.perceive(images).squeeze(1)
             images = self.image_proj(images)
 
             model_input = self.decoder(text_tokens)[1]
-            # print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
-            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
             model_input = self.decoder(model_input, tokens_mask=None)
             output = self.decoder(model_input, passed_x=model_input)[0]
-
             return output
         
         except Exception as e:
