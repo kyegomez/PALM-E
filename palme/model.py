@@ -118,8 +118,11 @@ class PALME(nn.Module):
         try:
                 
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
+            print(images.shape)
             images = self.perceive(images).squeeze(1)
+            print(images.shape)
             images = self.image_proj(images)
+            print(images.shape)
 
             model_input = self.decoder(text_tokens)
             model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
