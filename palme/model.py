@@ -69,7 +69,7 @@ class PALME(nn.Module):
         super(PALME, self).__init__()
         try:
 
-            self.ViT_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
+            self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.embed = bitsandbytes.nn.modules.Embedding(
                 32002,
@@ -117,26 +117,19 @@ class PALME(nn.Module):
     def forward(self, text_tokens, images):
         try:
                 
-            images = images.view(images.size(0), -1)  # Flatten the images
+            # images = images.view(images.size(0), -1)  # Flatten the images
             # images = self.image_resize(images)  # Resize the images using the linear transformation layer
             # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
 
+            images = self.clip_model(pixel_values=images)["last_hidden_state"]
             images = self.perceive(images).squeeze(1)
-            print(f"Images perceive: {images}")
-
             images = self.image_proj(images)
-            print(f"Images projected: {images}")
 
-            images_flattened = images.view(images.size(0), -1)
-            print(f"Images flattened: {images_flattened}")
 
             model_input = self.decoder(text_tokens)
             print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
-            images_flattened = images_flattened.view(1, 2, -1)
-            print(f"Images flattened: {images_flattened}")
-
-            model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
             print(f"Model input: {model_input}")
 
             model_input = self.decoder(model_input, tokens_mask=None)
