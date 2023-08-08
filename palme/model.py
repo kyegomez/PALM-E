@@ -106,9 +106,9 @@ class PALME(nn.Module):
 
             # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
-            self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
+            self.image_proj = torch.nn.Linear(1024, 50304, bias=False)
             torch.nn.init.normal_(
-                self.image_proj.weight, mean=0, std=2048**-0.5
+                self.image_proj.weight, mean=0, std=50304**-0.5
             )
 
         except Exception as e:
