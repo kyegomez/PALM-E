@@ -104,7 +104,7 @@ class PALME(nn.Module):
                 num_media_embeds = 257
             )
 
-            self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
+            # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
             self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
             torch.nn.init.normal_(
@@ -118,8 +118,8 @@ class PALME(nn.Module):
         try:
                 
             images = images.view(images.size(0), -1)  # Flatten the images
-            images = self.image_resize(images)  # Resize the images using the linear transformation layer
-            images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            # images = self.image_resize(images)  # Resize the images using the linear transformation layer
+            # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
 
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
