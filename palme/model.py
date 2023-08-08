@@ -116,6 +116,8 @@ class PALME(nn.Module):
 
     def forward(self, text_tokens, images):
         try:
+            if text_tokens.dtype != torch.long:
+                text_tokens = text_tokens.long()
                 
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print(images.shape)
