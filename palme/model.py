@@ -2,7 +2,6 @@
 import bitsandbytes
 import torch
 import torch.nn as nn
-from embedding import PositionalEmbedding
 from flamingo_pytorch import PerceiverResampler
 from palm_rlhf_pytorch import PaLM
 from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
@@ -78,10 +77,7 @@ class PALME(nn.Module):
                 padding_idx=1
             )
 
-            try:
-                self.embed_positions = PositionalEmbedding(2048, 2048, 1)
-            except Exception as e:
-                print(str(e))
+
 
             self.output_projection = torch.nn.Linear(
                 2048, 32002, bias=False
