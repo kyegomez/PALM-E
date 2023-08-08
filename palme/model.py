@@ -125,18 +125,11 @@ class PALME(nn.Module):
             images = self.perceive(images).squeeze(1)
             images = self.image_proj(images)
 
-
-            model_input = self.decoder(text_tokens)
-            print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
-
-            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
-            print(f"Model input: {model_input}")
-
+            model_input = self.decoder(text_tokens)[1]
+            # print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
             model_input = self.decoder(model_input, tokens_mask=None)
-            print(f"Model input: {model_input}")
-
             output = self.decoder(model_input, passed_x=model_input)[0]
-            print(f"output: {output}")
 
             return output
         
