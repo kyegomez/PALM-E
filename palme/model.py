@@ -184,6 +184,7 @@ class PALME(nn.Module):
 
             #convert type
             images = images.type(torch.LongTensor)
+            print(f"Images new type to torch long int: {images.shape}")
 
             # Process the text tokens
             model_input = self.decoder(text_tokens)
