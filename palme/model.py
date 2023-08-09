@@ -128,42 +128,6 @@ class PalmE(nn.Module):
 
         except Exception as e:
             print(f"Error initlizing palme components: {e}")
-
-    # def forward(self, text_tokens, images):
-    #     try:
-    #         # if text_tokens.dtype != torch.long:
-    #         # text_tokens = text_tokens.long()
-    #         print(text_tokens.shape)
-    #         images = self.vit_model(pixel_values=images)["last_hidden_state"]
-    #         # print(images.shape)
-    #         images = self.perceive(images).squeeze(1)
-    #         # print(images.shape)
-    #         images = self.image_proj(images)
-    #         # print(images.shape)
-
-    #         # images = images.unsqueeze(2)  # Adjust to [1, 64, 1, 50304]
-    #         # images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
-    #         # images = images.squeeze(2)  # Return to [1, 114, 50304]
-
-    #         # print(images.shape)
-
-    #         model_input = self.decoder(text_tokens)
-    #         print(model_input.shape)
-
-    #         # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-    #         # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-    #         model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:-2]], dim=1)
-    #         # print(model_input.shape)
-
-    #         model_input = self.decoder(model_input)
-    #         # print(model_input.shape)
-            
-    #         output = self.decoder(model_input, passed_x=model_input)[0]
-    #         return output
-        
-    #     except Exception as e:
-    #         print(f"Error duing forward pass: {e}")
-    #         return None
     
     def forward(self, text_tokens, images):
         # try:
@@ -218,43 +182,5 @@ class PalmE(nn.Module):
         #     print(f"Error during forward pass: {error}")
         #     return None
 
-    ###########
 
-    # def forward(self, text_tokens, images):
-    #     text_tokens = text_tokens.type(torch.LongTensor)
-        
-    #     # Print the initial shape of text tokens for clarity
-    #     print("Initial text tokens shape:", text_tokens.shape)
-    #     print(f"Initial text tokens dtype {text_tokens.dtype}")
-        
-    #     # Process images with the VIT model
-    #     images = self.vit_model(pixel_values=images)["last_hidden_state"]
-    #     print("Images after VIT model:", images.shape)
-    #     print(f"Images dtype: {images.dtype}")
-        
-    #     # Reshape images with perceive and project
-    #     images = self.perceive(images).squeeze(1)
-    #     print("Images after PerceiverResampler:", images.shape)
-        
-    #     images = self.image_proj(images)
-    #     print("Images after image_proj:", images.shape)
-        
-    #     # Process the text tokens
-    #     model_input = self.decoder(text_tokens)
-    #     print("Text tokens after decoding:", model_input.shape)
-        
-    #     # Adjust text tokens shape to match image tensor shape for concatenation
-    #     model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
-    #     print("Adjusted text tokens shape:", model_input.shape)
-
-    #     # Concatenate the tensors along the last dimension
-    #     concatenated_input = torch.cat([model_input, images], dim=-1)
-    #     print("Shape after concatenation:", concatenated_input.shape)
-
-    #     # Proceed with the forward propagation
-    #     model_input = self.decoder(concatenated_input)
-    #     print("After passing concatenated input through decoder:", model_input.shape)
-        
-    #     output = self.decoder(model_input)[0]
-    #     return output
 
