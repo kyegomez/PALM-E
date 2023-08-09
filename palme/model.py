@@ -3,7 +3,7 @@ import bitsandbytes
 import torch
 import torch.nn as nn
 from flamingo_pytorch import PerceiverResampler
-from palm_rlhf_pytorch import PaLM
+from palme.palm import PaLM
 from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
 
 
@@ -116,8 +116,8 @@ class PALME(nn.Module):
 
     def forward(self, text_tokens, images):
         try:
-            if text_tokens.dtype != torch.long:
-                text_tokens = text_tokens.long()
+            # if text_tokens.dtype != torch.long:
+            #     text_tokens = text_tokens.long()
                 
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print(images.shape)
