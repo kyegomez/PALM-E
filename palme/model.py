@@ -168,6 +168,7 @@ class PALME(nn.Module):
         try:
             # Print the initial shape of text tokens for clarity
             print("Initial text tokens shape:", text_tokens.shape)
+            print(f"Initial text tokens dtype {text_tokens.dtype}")
             
             # Process images with the VIT model
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
