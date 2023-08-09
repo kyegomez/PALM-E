@@ -182,9 +182,9 @@ class PALME(nn.Module):
             images = self.image_proj(images)
             print("Images after image_proj:", images.shape)
 
-            #convert type
-            images = images.type(torch.LongTensor)
-            print(f"Images new type to torch long int: {images.dtype}")
+            # #convert type
+            # images = images.type(torch.LongTensor)
+            # print(f"Images new type to torch long int: {images.dtype}")
 
             # Process the text tokens
             model_input = self.decoder(text_tokens)
@@ -203,13 +203,17 @@ class PALME(nn.Module):
             concatenated_input = torch.cat([model_input, images], dim=-1)
             print("Shape after concatenation:", concatenated_input.shape)
 
+            dense_layer = nn.Linear(concatenated_input.size(-1), concatenated_input.size(-1))
+            input = dense_layer(concatenated_input)
+
+
             # Proceed with the forward propagation
-            model_input = self.decoder(concatenated_input)
-            print("After passing concatenated input through decoder:", model_input.shape)
+            # model_input = self.decoder(concatenated_input)
+            # print("After passing concatenated input through decoder:", model_input.shape)
             
-            output = self.decoder(model_input, passed_x=model_input)[0]
+            output = self.decoder(input, passed_x=input)[0]
             return output
             
-        except Exception as e:
-            print(f"Error during forward pass: {e}")
+        except Exception as error:
+            print(f"Error during forward pass: {error}")
             return None
