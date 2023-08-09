@@ -166,6 +166,8 @@ class PALME(nn.Module):
     #         return None
     def forward(self, text_tokens, images):
         try:
+
+            text_tokens = text_tokens.type(torch.float32)
             # Print the initial shape of text tokens for clarity
             print("Initial text tokens shape:", text_tokens.shape)
             print(f"Initial text tokens dtype {text_tokens.dtype}")
@@ -203,14 +205,13 @@ class PALME(nn.Module):
             concatenated_input = torch.cat([model_input, images], dim=-1)
             print("Shape after concatenation:", concatenated_input.shape)
 
-            dense_layer = nn.Linear(concatenated_input.size(-1), concatenated_input.size(-1))
-            processed_input = dense_layer(concatenated_input)
+            
 
             # Proceed with the forward propagation
-            model_input = self.decoder(processed_input)
+            model_input = self.decoder(concatenated_input)
             print("After passing concatenated input through decoder:", model_input.shape)
             
-            output = self.decoder(model_input)
+            output = self.decoder(model_input)[0]
             return output
             
         except Exception as error:
