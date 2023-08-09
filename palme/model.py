@@ -6,6 +6,7 @@ from flamingo_pytorch import PerceiverResampler
 from palme.palm import PaLM
 from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
 
+import torch.nn.functional as F
 
 class PALMETokenizer:
     def __init__(self):
@@ -100,7 +101,7 @@ class PALME(nn.Module):
                 dim= 1024,
                 depth = 2,
                 dim_head = 8,
-                num_latents = 114,
+                num_latents = 64,
                 num_media_embeds = 257
             )
 
@@ -117,13 +118,17 @@ class PALME(nn.Module):
     def forward(self, text_tokens, images):
         try:
             # if text_tokens.dtype != torch.long:
-            text_tokens = text_tokens.long()
+            # text_tokens = text_tokens.long()
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print(images.shape)
             images = self.perceive(images).squeeze(1)
             print(images.shape)
             images = self.image_proj(images)
             print(images.shape)
+
+            images = images.unsqueeze(2)#adjust to [1, 64, 1, 50304]
+            images = F.interpolate(images, size=(114, 50304)) # reshape to [1, 114, 1, 50304]
+            images = images.squeeze(2) #return to [1, 114, 50304] => pops a dimension
 
             model_input = self.decoder(text_tokens)
             print(model_input.shape)
