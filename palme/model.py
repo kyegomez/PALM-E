@@ -129,6 +129,7 @@ class PALME(nn.Module):
             images = images.unsqueeze(2)#adjust to [1, 64, 1, 50304]
             images = F.interpolate(images, size=(114, 50304)) # reshape to [1, 114, 1, 50304]
             images = images.squeeze(2) #return to [1, 114, 50304] => pops a dimension
+            print(images.shape)
 
             model_input = self.decoder(text_tokens)
             print(model_input.shape)
