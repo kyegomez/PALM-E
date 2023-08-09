@@ -201,7 +201,7 @@ class PALME(nn.Module):
             print("After passing concatenated input through a dense layer:", processed_input.shape)
             
             # The following part depends on your architecture; assuming you have another module to handle embeddings:
-            output = self.final_layer(processed_input)
+            output = self.decoder(processed_input)
             return output
 
         except Exception as error:
