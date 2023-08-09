@@ -183,7 +183,7 @@ class PALME(nn.Module):
             print("Images after image_proj:", images.shape)
 
             # Process the text tokens
-            model_input = self.decoder(text_tokens)
+            model_input = self.decoder(text_tokens.long())
             print("Text tokens after decoding:", model_input.shape)
 
             # As per our understanding, text_tokens might be [1, 114+2, X]
