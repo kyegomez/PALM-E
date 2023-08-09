@@ -131,6 +131,7 @@ class PalmE(nn.Module):
     def forward(self, text_tokens, images):
         # Explicitly cast text_tokens to int64 (long)
         print(f"Original text tokens type: {text_tokens.dtype}")
+        
         text_tokens = text_tokens.to(torch.long)
         print(f'text tokens shape conversion to torch long: {text_tokens.dtype}')
 
