@@ -128,14 +128,11 @@ class PalmE(nn.Module):
 
         except Exception as e:
             print(f"Error initlizing palme components: {e}")
-    
     def forward(self, text_tokens, images):
-        # try:
-
+        # Explicitly cast text_tokens to int64 (long)
         print(f"Original text tokens type: {text_tokens.dtype}")
-
         text_tokens = text_tokens.to(torch.long)
-        print(f'text tokens shape converison to torch long: {text_tokens.dtype}')
+        print(f'text tokens shape conversion to torch long: {text_tokens.dtype}')
 
         # Print the initial shape of text tokens for clarity
         print("Initial text tokens shape:", text_tokens.shape)
@@ -151,48 +148,28 @@ class PalmE(nn.Module):
         print("Images after PerceiverResampler:", images.shape)
         print(f"Images dtype: {images.dtype}")
         
-        images = self.image_proj(images)#.to(self.device)
+        images = self.image_proj(images)
         print("Images after image_proj:", images.shape)
         print(f"Images dtype: {images.dtype}")
-
-        # #convert type
-        # images = images.type(torch.LongTensor)
-        # print(f"Images new type to torch long int: {images.dtype}")
 
         # Process the text tokens
         model_input = self.decoder(text_tokens)
         print("Text tokens after decoding:", model_input.shape)
         print(f"Model input type: {model_input.dtype}")
 
-        # As per our understanding, text_tokens might be [1, 114+2, X]
-        # We need to drop last 2 from the second dimension to make it [1, 114, X]
-        # We also want images to be of shape [1, 114, Y]
-        # The final concatenated tensor will be [1, 114, X+Y]
-        
-        # Before concatenating, check if the reshaping has made the first two dimensions equal
+        # Check dimension equality before concatenation
         if model_input.shape[:2] != images.shape[:2]:
             raise ValueError("Mismatched dimensions between images and text tokens")
 
-        # Concatenate the tensors along the last dimension
+        # Convert images to torch.int64 for concatenation
         images = images.to(torch.int64)
-        
+
+        # Concatenate along the last dimension
         concatenated_input = torch.cat([model_input, images], dim=-1)
         print("Shape after concatenation:", concatenated_input.shape)
-        print(f"Model input type: {concatenated_input.dtype}")
+        print(f"Model input type after concatenation: {concatenated_input.dtype}")
 
-
-        # Proceed with the forward propagation
-        model_input = self.decoder(concatenated_input)
-        print("After passing concatenated input through decoder:", model_input.shape)
-        print(f"Model input type: {model_input.dtype}")
-        
-        output = self.decoder(model_input)[0]
-        print(f"output input type: {output.dtype}")
+        # Pass concatenated tensor through the decoder
+        output = self.decoder(concatenated_input)[0]
+        print(f"Output dtype: {output.dtype}")
         return output
-            
-        # except Exception as error:
-        #     print(f"Error during forward pass: {error}")
-        #     return None
-
-
-
