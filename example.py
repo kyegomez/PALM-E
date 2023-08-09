@@ -20,6 +20,9 @@ from palme.model import PALME
 # print(f"Output: {output}")
 
 
+
+
+################################################################
 # Create dummy text token tensors.
 # Let's assume your text tokens are of size [1, 116, X], for demonstration purposes.
 dummy_text_tokens = torch.randint(0, 50304, (1, 2048)).cuda()
