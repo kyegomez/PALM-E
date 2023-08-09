@@ -121,8 +121,6 @@ class PALME(nn.Module):
                 num_media_embeds = 257
             )
 
-            # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
-
             self.image_proj = torch.nn.Linear(1024, self.num_tokens, bias=False)
             torch.nn.init.normal_(
                 self.image_proj.weight, mean=0, std=self.num_tokens**-0.5
@@ -142,9 +140,9 @@ class PALME(nn.Module):
             images = self.image_proj(images)
             print(images.shape)
 
-            images = images.unsqueeze(2)  # Adjust to [1, 64, 1, 50304]
-            images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
-            images = images.squeeze(2)  # Return to [1, 114, 50304]
+            # images = images.unsqueeze(2)  # Adjust to [1, 64, 1, 50304]
+            # images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
+            # images = images.squeeze(2)  # Return to [1, 114, 50304]
 
             print(images.shape)
 
