@@ -240,6 +240,14 @@ class PALME(nn.Module):
         # Process the text tokens
         model_input = self.decoder(text_tokens)
         print("Text tokens after decoding:", model_input.shape)
+
+        # Reshape model_input to its desired shape without adding an extra dimension
+        model_input = model_input.reshape(-1, 2048, 50304)
+        print("Reshaped model_input:", model_input.shape)
+
+        # Given that the second dimension of the images tensor is 50, we'll expand model_input to match that
+        model_input = model_input.expand(-1, images.shape[1], -1)
+        print("Expanded model_input:", model_input.shape)
         
         # Adjust text tokens shape to match image tensor shape for concatenation
         model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
