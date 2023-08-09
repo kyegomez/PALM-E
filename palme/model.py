@@ -126,15 +126,19 @@ class PALME(nn.Module):
             images = self.image_proj(images)
             print(images.shape)
 
-            images = images.unsqueeze(2)#adjust to [1, 64, 1, 50304]
-            images = F.interpolate(images, size=(114, 50304)) # reshape to [1, 114, 1, 50304]
-            images = images.squeeze(1) #return to [1, 114, 50304] => pops a dimension
+            images = images.unsqueeze(2)  # Adjust to [1, 64, 1, 50304]
+            images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
+            images = images.squeeze(2)  # Return to [1, 114, 50304]
+
             print(images.shape)
 
             model_input = self.decoder(text_tokens)
             print(model_input.shape)
 
-            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+            # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+            # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:-2]], dim=1)
+
             print(model_input.shape)
 
             model_input = self.decoder(model_input)
