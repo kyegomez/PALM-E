@@ -165,62 +165,10 @@ class PalmE(nn.Module):
     #         print(f"Error duing forward pass: {e}")
     #         return None
     
-    # def forward(self, text_tokens, images):
-    #     # try:
-
-    #     text_tokens = text_tokens.type(torch.LongTensor)
-    #     # Print the initial shape of text tokens for clarity
-    #     print("Initial text tokens shape:", text_tokens.shape)
-    #     print(f"Initial text tokens dtype {text_tokens.dtype}")
-        
-    #     # Process images with the VIT model
-    #     images = self.vit_model(pixel_values=images)["last_hidden_state"]
-    #     print("Images after VIT model:", images.shape)
-    #     print(f"Images dtype: {images.dtype}")
-        
-    #     # Reshape images with perceive and project
-    #     images = self.perceive(images).squeeze(1)
-    #     print("Images after PerceiverResampler:", images.shape)
-        
-    #     images = self.image_proj(images)
-    #     print("Images after image_proj:", images.shape)
-
-    #     # #convert type
-    #     # images = images.type(torch.LongTensor)
-    #     # print(f"Images new type to torch long int: {images.dtype}")
-
-    #     # Process the text tokens
-    #     model_input = self.decoder(text_tokens)
-    #     print("Text tokens after decoding:", model_input.shape)
-
-    #     # As per our understanding, text_tokens might be [1, 114+2, X]
-    #     # We need to drop last 2 from the second dimension to make it [1, 114, X]
-    #     # We also want images to be of shape [1, 114, Y]
-    #     # The final concatenated tensor will be [1, 114, X+Y]
-        
-    #     # Before concatenating, check if the reshaping has made the first two dimensions equal
-    #     if model_input.shape[:2] != images.shape[:2]:
-    #         raise ValueError("Mismatched dimensions between images and text tokens")
-
-    #     # Concatenate the tensors along the last dimension
-    #     concatenated_input = torch.cat([model_input, images], dim=-1)
-    #     print("Shape after concatenation:", concatenated_input.shape)
-
-
-    #     # Proceed with the forward propagation
-    #     model_input = self.decoder(concatenated_input)
-    #     print("After passing concatenated input through decoder:", model_input.shape)
-        
-    #     output = self.decoder(model_input)[0]
-    #     return output
-            
-    #     # except Exception as error:
-    #     #     print(f"Error during forward pass: {error}")
-    #     #     return None
-
     def forward(self, text_tokens, images):
+        # try:
+
         text_tokens = text_tokens.type(torch.LongTensor)
-        
         # Print the initial shape of text tokens for clarity
         print("Initial text tokens shape:", text_tokens.shape)
         print(f"Initial text tokens dtype {text_tokens.dtype}")
@@ -236,18 +184,28 @@ class PalmE(nn.Module):
         
         images = self.image_proj(images)
         print("Images after image_proj:", images.shape)
-        
+
+        # #convert type
+        # images = images.type(torch.LongTensor)
+        # print(f"Images new type to torch long int: {images.dtype}")
+
         # Process the text tokens
         model_input = self.decoder(text_tokens)
         print("Text tokens after decoding:", model_input.shape)
+
+        # As per our understanding, text_tokens might be [1, 114+2, X]
+        # We need to drop last 2 from the second dimension to make it [1, 114, X]
+        # We also want images to be of shape [1, 114, Y]
+        # The final concatenated tensor will be [1, 114, X+Y]
         
-        # Adjust text tokens shape to match image tensor shape for concatenation
-        model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
-        print("Adjusted text tokens shape:", model_input.shape)
+        # Before concatenating, check if the reshaping has made the first two dimensions equal
+        if model_input.shape[:2] != images.shape[:2]:
+            raise ValueError("Mismatched dimensions between images and text tokens")
 
         # Concatenate the tensors along the last dimension
         concatenated_input = torch.cat([model_input, images], dim=-1)
         print("Shape after concatenation:", concatenated_input.shape)
+
 
         # Proceed with the forward propagation
         model_input = self.decoder(concatenated_input)
@@ -255,4 +213,48 @@ class PalmE(nn.Module):
         
         output = self.decoder(model_input)[0]
         return output
+            
+        # except Exception as error:
+        #     print(f"Error during forward pass: {error}")
+        #     return None
+
+    ###########
+
+    # def forward(self, text_tokens, images):
+    #     text_tokens = text_tokens.type(torch.LongTensor)
+        
+    #     # Print the initial shape of text tokens for clarity
+    #     print("Initial text tokens shape:", text_tokens.shape)
+    #     print(f"Initial text tokens dtype {text_tokens.dtype}")
+        
+    #     # Process images with the VIT model
+    #     images = self.vit_model(pixel_values=images)["last_hidden_state"]
+    #     print("Images after VIT model:", images.shape)
+    #     print(f"Images dtype: {images.dtype}")
+        
+    #     # Reshape images with perceive and project
+    #     images = self.perceive(images).squeeze(1)
+    #     print("Images after PerceiverResampler:", images.shape)
+        
+    #     images = self.image_proj(images)
+    #     print("Images after image_proj:", images.shape)
+        
+    #     # Process the text tokens
+    #     model_input = self.decoder(text_tokens)
+    #     print("Text tokens after decoding:", model_input.shape)
+        
+    #     # Adjust text tokens shape to match image tensor shape for concatenation
+    #     model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
+    #     print("Adjusted text tokens shape:", model_input.shape)
+
+    #     # Concatenate the tensors along the last dimension
+    #     concatenated_input = torch.cat([model_input, images], dim=-1)
+    #     print("Shape after concatenation:", concatenated_input.shape)
+
+    #     # Proceed with the forward propagation
+    #     model_input = self.decoder(concatenated_input)
+    #     print("After passing concatenated input through decoder:", model_input.shape)
+        
+    #     output = self.decoder(model_input)[0]
+    #     return output
 
