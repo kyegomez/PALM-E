@@ -145,7 +145,7 @@ class PALME(nn.Module):
             # images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
             # images = images.squeeze(2)  # Return to [1, 114, 50304]
 
-            print(images.shape)
+            # print(images.shape)
 
             model_input = self.decoder(text_tokens)
             print(model_input.shape)
