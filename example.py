@@ -5,7 +5,7 @@ from palme.model import PALME
 text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.LongTensor)
 
 # Create a sample image tensor
-images = torch.randn(1, 3, 224, 224)
+images = torch.randn(1, 3, 224, 224).dtype(torch.LongTensor)
 
 # Instantiate the model
 model = PALME()
