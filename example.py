@@ -22,7 +22,7 @@ from palme.model import PALME
 
 # Create dummy text token tensors.
 # Let's assume your text tokens are of size [1, 116, X], for demonstration purposes.
-dummy_text_tokens = torch.randint(0, 50304, (1, 116, 2048))
+dummy_text_tokens = torch.randint(0, 50304, (1, 2048)).cuda()
 
 # Create dummy image tensors.
 # The required size for images for the ViT model in CLIP is [batch_size, 3, 224, 224].
