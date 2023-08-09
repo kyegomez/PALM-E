@@ -167,7 +167,7 @@ class PALME(nn.Module):
     def forward(self, text_tokens, images):
         # try:
 
-        text_tokens = text_tokens.type(torch.float32)
+        text_tokens = text_tokens.type(torch.LongTensor)
         # Print the initial shape of text tokens for clarity
         print("Initial text tokens shape:", text_tokens.shape)
         print(f"Initial text tokens dtype {text_tokens.dtype}")
