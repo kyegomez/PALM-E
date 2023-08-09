@@ -2,7 +2,7 @@ import torch
 from palme.model import PALME
 
 # Create a sample text token tensor
-text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
+text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.LongTensor)
 
 # Create a sample image tensor
 images = torch.randn(1, 3, 224, 224)
