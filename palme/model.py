@@ -132,7 +132,7 @@ class PalmE(nn.Module):
     def forward(self, text_tokens, images):
         # try:
 
-        text_tokens = text_tokens.type(torch.LongTensor)
+        text_tokens = text_tokens.to(torch.long)
         # Print the initial shape of text tokens for clarity
         print("Initial text tokens shape:", text_tokens.shape)
         print(f"Initial text tokens dtype {text_tokens.dtype}")
@@ -146,7 +146,7 @@ class PalmE(nn.Module):
         images = self.perceive(images).squeeze(1)
         print("Images after PerceiverResampler:", images.shape)
         
-        images = self.image_proj(images)
+        images = self.image_proj(images).to(self.device)
         print("Images after image_proj:", images.shape)
 
         # #convert type
