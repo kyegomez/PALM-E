@@ -174,6 +174,8 @@ class PalmE(nn.Module):
             raise ValueError("Mismatched dimensions between images and text tokens")
 
         # Concatenate the tensors along the last dimension
+        images = images.to(torch.int64)
+        
         concatenated_input = torch.cat([model_input, images], dim=-1)
         print("Shape after concatenation:", concatenated_input.shape)
         print(f"Model input type: {concatenated_input.dtype}")
