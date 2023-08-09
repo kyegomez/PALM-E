@@ -1,5 +1,5 @@
 import torch
-from palme.model import PALME
+from palme.model import PalmE
 
 # Create a sample text token tensor
 text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
@@ -8,7 +8,7 @@ text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
 images = torch.randn(1, 3, 224, 224)
 
 # Instantiate the model
-model = PALME()
+model = PalmE()
 
 # Pass the sample tensors to the model's forward function
 output = model.forward(

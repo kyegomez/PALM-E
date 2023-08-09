@@ -65,7 +65,7 @@ class PALMETokenizer:
         except Exception as e:
             print(f"Error during tokenization {e}")
         
-class PALME(nn.Module):
+class PalmE(nn.Module):
     def __init__(self,
                  num_tokens: int = 50304,
                  dim: int = 2048,
@@ -74,7 +74,7 @@ class PALME(nn.Module):
                  heads: int = 8,
                  flash_attn=True,
                  qk_rmsnorm=False):
-        super(PALME, self).__init__()
+        super(PalmE, self).__init__()
         self.num_tokens = num_tokens
         self.dim = dim
         self.depth = depth
