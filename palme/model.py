@@ -132,7 +132,10 @@ class PalmE(nn.Module):
     def forward(self, text_tokens, images):
         # try:
 
-        # text_tokens = text_tokens #.to(torch.long)
+        print(f"Original text tokens type: {text_tokens.dtype}")
+
+        text_tokens = text_tokens.to(torch.long)
+        print(f'text tokens shape converison to torch long: {text_tokens.dtype}')
 
         # Print the initial shape of text tokens for clarity
         print("Initial text tokens shape:", text_tokens.shape)
@@ -157,6 +160,7 @@ class PalmE(nn.Module):
         # Process the text tokens
         model_input = self.decoder(text_tokens)
         print("Text tokens after decoding:", model_input.shape)
+        print(f"Model input type: {model_input.dtype}")
 
         # As per our understanding, text_tokens might be [1, 114+2, X]
         # We need to drop last 2 from the second dimension to make it [1, 114, X]
@@ -170,13 +174,16 @@ class PalmE(nn.Module):
         # Concatenate the tensors along the last dimension
         concatenated_input = torch.cat([model_input, images], dim=-1)
         print("Shape after concatenation:", concatenated_input.shape)
+        print(f"Model input type: {concatenated_input.dtype}")
 
 
         # Proceed with the forward propagation
         model_input = self.decoder(concatenated_input)
         print("After passing concatenated input through decoder:", model_input.shape)
+        print(f"Model input type: {model_input.dtype}")
         
         output = self.decoder(model_input)[0]
+        print(f"output input type: {output.dtype}")
         return output
             
         # except Exception as error:

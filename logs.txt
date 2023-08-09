@@ -24,3 +24,41 @@ Traceback (most recent call last):
 RuntimeError: expand(torch.FloatTensor{[1, 1, 2048, 50304]}, size=[-1, 50, -1]): 
 the number of sizes provided (3)
  must be greater or equal to the number of dimensions in the tensor (4)
+
+
+
+
+
+
+
+ ########2
+[2023-08-09 19:48:22,528] [INFO] [real_accelerator.py:133:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["id2label"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["bos_token_id"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["eos_token_id"]` will be overriden.
+Non-A100 GPU detected, using math or mem efficient attention if input tensor is on cuda
+Initial text tokens shape: torch.Size([1, 50])
+Initial text tokens dtype torch.int64
+Images after VIT model: torch.Size([1, 257, 1024])
+Images dtype: torch.float32
+Images after PerceiverResampler: torch.Size([1, 50, 1024])
+Images after image_proj: torch.Size([1, 50, 50304])
+Text tokens after decoding: torch.Size([1, 50, 50304])
+Shape after concatenation: torch.Size([1, 50, 100608])
+Traceback (most recent call last):
+  File "/home/commune/PALM-E/example.py", line 14, in <module>
+    output = model.forward(
+  File "/home/commune/PALM-E/palme/model.py", line 176, in forward
+    model_input = self.decoder(concatenated_input)
+  File "/home/commune/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/commune/PALM-E/palme/palm.py", line 473, in forward
+    x = self.token_emb(x)
+  File "/home/commune/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/commune/.local/lib/python3.10/site-packages/torch/nn/modules/sparse.py", line 162, in forward
+    return F.embedding(
+  File "/home/commune/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 2210, in embedding
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+RuntimeError: Expected tensor for argument #1 'indices' to have one of the following scalar types: 
+Long, Int; but got torch.FloatTensor instead (while checking arguments for embedding)
