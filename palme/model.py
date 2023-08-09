@@ -182,8 +182,11 @@ class PALME(nn.Module):
             images = self.image_proj(images)
             print("Images after image_proj:", images.shape)
 
+            #convert type
+            images = images.type(torch.LongTensor)
+
             # Process the text tokens
-            model_input = self.decoder(text_tokens.long())
+            model_input = self.decoder(text_tokens)
             print("Text tokens after decoding:", model_input.shape)
 
             # As per our understanding, text_tokens might be [1, 114+2, X]
