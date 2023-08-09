@@ -242,8 +242,8 @@ class PALME(nn.Module):
         print("Text tokens after decoding:", model_input.shape)
         
         # Adjust text tokens shape to match image tensor shape for concatenation
-        model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
-        print("Adjusted text tokens shape:", model_input.shape)
+        # model_input = model_input.unsqueeze(1).expand(-1, images.shape[1], -1)
+        # print("Adjusted text tokens shape:", model_input.shape)
 
         # Concatenate the tensors along the last dimension
         concatenated_input = torch.cat([model_input, images], dim=-1)
