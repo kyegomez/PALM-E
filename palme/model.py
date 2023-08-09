@@ -66,39 +66,55 @@ class PALMETokenizer:
             print(f"Error during tokenization {e}")
         
 class PALME(nn.Module):
-    def __init__(self):
+    def __init__(self,
+                 num_tokens: int = 50304,
+                 dim: int = 2048,
+                 depth: int = 16,
+                 dim_head: int = 128,
+                 heads: int = 8,
+                 flash_attn=True,
+                 qk_rmsnorm=False):
         super(PALME, self).__init__()
+        self.num_tokens = num_tokens
+        self.dim = dim
+        self.depth = depth
+        self.dim_head = dim_head
+
+        self.heads = heads
+        self.flash_attn = flash_attn
+        self.qk_rmsnorm = qk_rmsnorm
+        
         try:
 
             self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.embed = bitsandbytes.nn.modules.Embedding(
-                50304,
-                2048,
+                self.num_tokens,
+                self.dim,
                 padding_idx=1
             )
 
 
 
             self.output_projection = torch.nn.Linear(
-                2048, 50304, bias=False
+                self.dim, self.num_tokens, bias=False
             )
             torch.nn.init.normal_(
-                self.output_projection.weight, mean=0, std=2048**-0.5
+                self.output_projection.weight, mean=0, std=self.dim**-0.5
             )
 
             self.decoder = PaLM(
-                num_tokens=50304,
-                dim=2048,
-                depth=16,
-                dim_head=128,
-                heads=8,
-                flash_attn=True,
-                qk_rmsnorm=False,
+                num_tokens=self.num_tokens,
+                dim=self.dim,
+                depth=self.depth,
+                dim_head=self.dim_head,
+                heads=self.heads,
+                flash_attn=self.flash_attn,
+                qk_rmsnorm=self.qk_rmsnorm,
             )
 
             self.perceive = PerceiverResampler(
-                dim= 1024,
+                dim = 1024,
                 depth = 2,
                 dim_head = 8,
                 num_latents = 64,
@@ -107,9 +123,9 @@ class PALME(nn.Module):
 
             # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
-            self.image_proj = torch.nn.Linear(1024, 50304, bias=False)
+            self.image_proj = torch.nn.Linear(1024, self.num_tokens, bias=False)
             torch.nn.init.normal_(
-                self.image_proj.weight, mean=0, std=50304**-0.5
+                self.image_proj.weight, mean=0, std=self.num_tokens**-0.5
             )
 
         except Exception as e:
