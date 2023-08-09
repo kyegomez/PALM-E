@@ -147,7 +147,7 @@ class PalmE(nn.Module):
         images = self.perceive(images).squeeze(1)
         print("Images after PerceiverResampler:", images.shape)
         
-        images = self.image_proj(images).to(self.device)
+        images = self.image_proj(images)#.to(self.device)
         print("Images after image_proj:", images.shape)
 
         # #convert type
