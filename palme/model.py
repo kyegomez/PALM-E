@@ -133,6 +133,7 @@ class PALME(nn.Module):
         try:
             # if text_tokens.dtype != torch.long:
             # text_tokens = text_tokens.long()
+            print(text_tokens.shape)
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print(images.shape)
             images = self.perceive(images).squeeze(1)
