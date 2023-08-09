@@ -153,11 +153,10 @@ class PALME(nn.Module):
             # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
             # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
             model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:-2]], dim=1)
-
-            print(model_input.shape)
+            # print(model_input.shape)
 
             model_input = self.decoder(model_input)
-            print(model_input.shape)
+            # print(model_input.shape)
             
             output = self.decoder(model_input, passed_x=model_input)[0]
             return output
