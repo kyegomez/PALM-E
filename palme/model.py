@@ -173,6 +173,7 @@ class PALME(nn.Module):
             # Process images with the VIT model
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print("Images after VIT model:", images.shape)
+            print(f"Images dtype: {images.dtype}")
             
             # Reshape images with perceive and project
             images = self.perceive(images).squeeze(1)
