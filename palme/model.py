@@ -135,11 +135,11 @@ class PALME(nn.Module):
             # text_tokens = text_tokens.long()
             print(text_tokens.shape)
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
-            print(images.shape)
+            # print(images.shape)
             images = self.perceive(images).squeeze(1)
-            print(images.shape)
+            # print(images.shape)
             images = self.image_proj(images)
-            print(images.shape)
+            # print(images.shape)
 
             # images = images.unsqueeze(2)  # Adjust to [1, 64, 1, 50304]
             # images = F.interpolate(images, size=(114, 50304))  # Reshape to [1, 114, 1, 50304]
