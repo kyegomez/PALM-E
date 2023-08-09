@@ -205,7 +205,6 @@ class PALME(nn.Module):
             concatenated_input = torch.cat([model_input, images], dim=-1)
             print("Shape after concatenation:", concatenated_input.shape)
 
-            
 
             # Proceed with the forward propagation
             model_input = self.decoder(concatenated_input)
