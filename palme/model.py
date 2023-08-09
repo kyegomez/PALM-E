@@ -117,7 +117,7 @@ class PALME(nn.Module):
                 dim = 1024,
                 depth = 2,
                 dim_head = 8,
-                num_latents = 64,
+                num_latents = 50,
                 num_media_embeds = 257
             )
 
