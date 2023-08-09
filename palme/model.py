@@ -149,9 +149,11 @@ class PalmE(nn.Module):
         # Reshape images with perceive and project
         images = self.perceive(images).squeeze(1)
         print("Images after PerceiverResampler:", images.shape)
+        print(f"Images dtype: {images.dtype}")
         
         images = self.image_proj(images)#.to(self.device)
         print("Images after image_proj:", images.shape)
+        print(f"Images dtype: {images.dtype}")
 
         # #convert type
         # images = images.type(torch.LongTensor)
