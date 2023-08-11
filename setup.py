@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
   name = 'palme',
   packages = find_packages(exclude=['examples']),
-  version = '0.0.3',
+  version = '0.0.4',
   license='MIT',
   description = 'palme - Pytorch',
   author = 'Kye Gomez',
@@ -16,7 +16,7 @@ setup(
     'transformers'
   ],
   install_requires=[
-    "torch"
+    "torch",
     "lion-pytorch",
     "numpy",
     "einops",
