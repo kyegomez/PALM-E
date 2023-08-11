@@ -1,5 +1,6 @@
+# 🌴 PALM-E: A Revolutionary Multi-Modal AI Model 🤖🎉
 
-# PALM-E: A Revolutionary Multi-Modal AI Model
+Welcome to **PALM-E**, your gateway to the future! Dive into the magical world of multi-modal AI with us. Process both text and images in harmony and discover new horizons 🌅. 
 
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/issues) 
@@ -15,101 +16,86 @@
 
 
 
----
+## 🚀 Quick Start
 
-[PaLM-E: An Embodied Multimodal Language Model paper](https://arxiv.org/pdf/2303.03378v1.pdf)
+### Installation 📦
 
-PALM-E is an innovative multi-modal AI model that combines the power of pre-trained language models with continuous observation encoders, such as Vision Transformers (ViT). 
-
-
-
-## Installation
-
-Clone the repository and install the required packages.
-
-```
+```sh
 pip install palme
 ```
 
-```sh
-git clone https://github.com/kyegomez/PALM-E.git
-cd palm_e
-pip install -r requirements.txt
+### Usage 🎨
+
+```python
+import torch
+from palme.model import PalmE
+
+# Sample text token tensor
+text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
+
+# Sample image tensor
+images = torch.randn(1, 3, 224, 224)
+
+# Model magic
+model = PalmE()
+
+# Feed the beast
+output = model.forward(text_tokens=text_tokens, images=images)
+
+# Voilà!
+print(f"Output: {output}")
 ```
+---
 
-You can also install PALM-E directly using pip:
+## 🌟 What Makes PALM-E Shine?
 
-```sh
-pip install git+https://github.com/kyegomez/PALM-E.git
-```
+- 🌈 **Maximize Dream Outcome**: A key to integrating both visual and textual data for problem-solving.
+- 🎯 **Maximize Perceived Likelihood of Success**: Built with the giants - pre-trained Language Models and Vision Transformers.
+- ⏩ **Minimize Time to Success**: Speedy Gonzales thanks to fast-processing encoders and projectors.
+- 🍰 **Minimize Effort & Sacrifice**: We simplify the daunting tasks of multi-modal sentence formation for you!
 
-Then, run the training script:
+## 🔍 A Peek Inside the Magic Box 
 
-```sh
-python3 train.py
-```
+PALM-E stands on the shoulders of giants:
 
-## Value Proposition
+- 📜 A majestic pre-trained Language Model.
+- 🖼️ An elegant encoder for continuous observations (like Vision Transformer).
+- 🔦 A projector that's perfect to map the encoder outputs to the language embedding realms.
 
-PALM-E creates value through:
+Our approach processes both text and continuous observations, intertwining the encoded observations with text tokens for multi-modal sentences. Hence, context-aware responses based on textual and visual info!
 
-- Maximize Dream Outcome: Provides a solution to integrate both visual and textual data for problem-solving.
-- Maximize Perceived Likelihood of Success: Incorporates proven technologies like pre-trained Language Models and Vision Transformers.
-- Minimize Time to Success: Optimized with fast-processing encoders and projectors.
-- Minimize Effort & Sacrifice: Simplifies complex tasks of multi-modal sentence formation.
+## 🌍 PALM-E in the Real World
 
-## Model Architecture
+**How PALM-E can shape the world:**
 
-PALM-E is built upon the following key components:
+- 🛍️ **E-commerce**: Up your recommendation game with text + visual understanding.
+- 🌡️ **Healthcare**: A 360° patient view with image & text data.
+- 📚 **Education**: Tailored learning experiences.
+- 🏙️ **Smart Cities**: Plan, optimize, and beautify urban spaces with satellite imagery and textual data insights.
 
-- A pre-trained Language Model (PaLM) as the base model.
-- An encoder for continuous observations (e.g., Vision Transformer (ViT)).
-- A projector to map the encoder output to the language embedding space.
+... and that's just scratching the surface! 🚀
 
-PALM-E processes both text and continuous observations, such as images, and forms multi-modal sentences by interleaving the encoded observations with text tokens. This allows it to generate context-aware responses based on both textual and visual information.
+## 🤝 Be Part of the PALM-E Adventure!
 
+Your brilliance is needed! Join us, and together, let's make PALM-E even more awe-inspiring:
 
+1. **Get Your Copy**: Fork the PALM-E repo.
+2. **Make It Local**: Clone your fork.
+3. **Prep Your Tools**: Install the necessities.
+4. **Discover & Innovate**: Dive into the code.
+5. **Craft Your Magic**: Branch and code away.
+6. **Show & Tell**: Push your changes and craft a pull request.
 
-## Commercial Use Cases
+🐞 Fixes, 🎨 enhancements, 📝 docs, or 💡 ideas – all are welcome! Let's shape the future of AI, hand in hand.
 
-PALM-E's ability to process and understand multi-modal data opens up a world of possibilities in various domains, including:
+## 🛤️ The Road Ahead
 
-- E-commerce: Enhance product recommendations by understanding both textual descriptions and visual features of products.
-- Healthcare: Improve diagnostics by analyzing medical images and textual patient records simultaneously.
-- Education: Create personalized learning experiences by understanding students' textual inputs and visual cues.
-- Smart Cities: Optimize urban planning and resource allocation by analyzing satellite imagery and textual data from various sources.
+- 🕵️ Verify decoder configurations.
+- 🚂 Recreate the training strategy detailed in the paper.
+- 🌐 Train on the datasets used in the paper.
 
-These are just a few examples of how PALM-E can revolutionize industries and improve people's lives.
+## 📘 More Secrets and Stories
 
-## Contribute to PALM-E and Make the World a Better Place
+Crave more details? Wander into the "examples" and "docs" realms. Have a riddle or need guidance? Raise an issue or find us in the digital alleys of the web!
 
-We invite you to join us in our mission to make the world a better place through the power of multi-modal AI. Here are the steps to start contributing:
-
-1. Fork the PALM-E GitHub repository.
-2. Clone the forked repository to your local machine.
-3. Install the required dependencies.
-4. Explore the code and identify areas where you can contribute.
-5. Create a new branch for your changes.
-6. Commit your changes and push them to your forked repository.
-7. Create a pull request to submit your changes for review.
-
-We welcome contributions in any form of bug fixes, performance improvements, new features, and documentation updates. Together, we can shape the future of AI and create a better world for everyone.
-
-Thank you for your interest in PALM-E, and we look forward to collaborating with you!
-
-# Future Work:
-
-* Verify the correct configuration of the decoder. If necessary, pass in embedded tokens, embed positions, output projections.
-* Recreate the training strategy from the paper:
-    - For each example in the dataset:
-        - Extract text and continuous observations.
-        - Tokenize text and continuous observations using the tokenizer.
-        - Encode continuous observations using the chosen encoder.
-        - Interleave encoded observations with text tokens to form multi-modal sentences.
-        - Compute loss using cross-entropy for non-prefix tokens.
-        - Update model parameters.
-* Train the model on the same datasets used in the paper.
-
-# Examples and Documentation
-
-Please refer to the "examples" and "docs" directories for more detailed examples and comprehensive documentation on using PALM-E. Feel free to raise an issue or contact us directly for further inquiries.
+**Together, let's make AI magic with PALM-E! 🎩🐇**
