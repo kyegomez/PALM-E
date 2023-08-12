@@ -1,6 +1,6 @@
-# 🌴 PALM-E: A Revolutionary Multi-Modal AI Model 🤖🎉
+# 🌴 PALM-E: A Multi-Modal AI Model 
 
-Welcome to **PALM-E**, your gateway to the future! Dive into the magical world of multi-modal AI with us. Process both text and images in harmony and discover new horizons 🌅. 
+Palm-E can Process both text and images in harmony.
 
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/issues) 
@@ -36,27 +36,22 @@ text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
 # Sample image tensor
 images = torch.randn(1, 3, 224, 224)
 
-# Model magic
 model = PalmE()
 
-# Feed the beast
 output = model.forward(text_tokens=text_tokens, images=images)
 
-# Voilà!
 print(f"Output: {output}")
 ```
 ---
 
-## 🌟 What Makes PALM-E Shine?
+## Features
 
 - 🌈 **Maximize Dream Outcome**: A key to integrating both visual and textual data for problem-solving.
 - 🎯 **Maximize Perceived Likelihood of Success**: Built with the giants - pre-trained Language Models and Vision Transformers.
 - ⏩ **Minimize Time to Success**: Speedy Gonzales thanks to fast-processing encoders and projectors.
 - 🍰 **Minimize Effort & Sacrifice**: We simplify the daunting tasks of multi-modal sentence formation for you!
 
-## 🔍 A Peek Inside the Magic Box 
-
-PALM-E stands on the shoulders of giants:
+## 🔍 System Architecture
 
 - 📜 A majestic pre-trained Language Model.
 - 🖼️ An elegant encoder for continuous observations (like Vision Transformer).
@@ -64,9 +59,7 @@ PALM-E stands on the shoulders of giants:
 
 Our approach processes both text and continuous observations, intertwining the encoded observations with text tokens for multi-modal sentences. Hence, context-aware responses based on textual and visual info!
 
-## 🌍 PALM-E in the Real World
-
-**How PALM-E can shape the world:**
+## Real-World Use-Cases🌍 
 
 - 🛍️ **E-commerce**: Up your recommendation game with text + visual understanding.
 - 🌡️ **Healthcare**: A 360° patient view with image & text data.
@@ -75,7 +68,7 @@ Our approach processes both text and continuous observations, intertwining the e
 
 ... and that's just scratching the surface! 🚀
 
-## 🤝 Be Part of the PALM-E Adventure!
+## Contribute || Be Part of the PALM-E Adventure 🤝
 
 Your brilliance is needed! Join us, and together, let's make PALM-E even more awe-inspiring:
 
@@ -88,14 +81,11 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 
 🐞 Fixes, 🎨 enhancements, 📝 docs, or 💡 ideas – all are welcome! Let's shape the future of AI, hand in hand.
 
-## 🛤️ The Road Ahead
+## Roadmap
 
 - 🕵️ Verify decoder configurations.
 - 🚂 Recreate the training strategy detailed in the paper.
 - 🌐 Train on the datasets used in the paper.
 
-## 📘 More Secrets and Stories
-
-Crave more details? Wander into the "examples" and "docs" realms. Have a riddle or need guidance? Raise an issue or find us in the digital alleys of the web!
-
-**Together, let's make AI magic with PALM-E! 🎩🐇**
+## 📘 Documentation
+* Documentation will come soon
