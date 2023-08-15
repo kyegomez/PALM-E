@@ -1,6 +1,6 @@
 # 🌴 PALM-E: A Multi-Modal AI Model 
 
-Palm-E can Process both text and images in harmony.
+This is the open source implementation of the SOTA multi-modality foundation model "PaLM-E: An Embodied Multimodal Language Model" from Google, PALM-E is a single large embodied multimodal model, that can address a variety of embodied reasoning tasks, from a variety of observation modalities, on multiple embodiments, and further, exhibits positive transfer: the model benefits from diverse joint training across internet-scale language, vision, and visual-language domains.
 
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/PALM-E)](https://github.com/kyegomez/PALM-E/issues) 
@@ -44,30 +44,6 @@ print(f"Output: {output}")
 ```
 ---
 
-## Features
-
-- 🌈 **Maximize Dream Outcome**: A key to integrating both visual and textual data for problem-solving.
-- 🎯 **Maximize Perceived Likelihood of Success**: Built with the giants - pre-trained Language Models and Vision Transformers.
-- ⏩ **Minimize Time to Success**: Speedy Gonzales thanks to fast-processing encoders and projectors.
-- 🍰 **Minimize Effort & Sacrifice**: We simplify the daunting tasks of multi-modal sentence formation for you!
-
-## 🔍 System Architecture
-
-- 📜 A majestic pre-trained Language Model.
-- 🖼️ An elegant encoder for continuous observations (like Vision Transformer).
-- 🔦 A projector that's perfect to map the encoder outputs to the language embedding realms.
-
-Our approach processes both text and continuous observations, intertwining the encoded observations with text tokens for multi-modal sentences. Hence, context-aware responses based on textual and visual info!
-
-## Real-World Use-Cases🌍 
-
-- 🛍️ **E-commerce**: Up your recommendation game with text + visual understanding.
-- 🌡️ **Healthcare**: A 360° patient view with image & text data.
-- 📚 **Education**: Tailored learning experiences.
-- 🏙️ **Smart Cities**: Plan, optimize, and beautify urban spaces with satellite imagery and textual data insights.
-
-... and that's just scratching the surface! 🚀
-
 ## Contribute || Be Part of the PALM-E Adventure 🤝
 
 Your brilliance is needed! Join us, and together, let's make PALM-E even more awe-inspiring:
@@ -89,3 +65,4 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 
 ## 📘 Documentation
 * Documentation will come soon
+
