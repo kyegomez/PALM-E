@@ -1,3 +1,5 @@
+[Join Agora](https://discord.gg/qUtxnK2NMf) the community of AI engineers changing the world with their creations.
+
 # 🌴 PALM-E: A Multi-Modal AI Model 
 
 This is the open source implementation of the SOTA multi-modality foundation model "PALM-E: An Embodied Multimodal Language Model" from Google, PALM-E is a single large embodied multimodal model, that can address a variety of embodied reasoning tasks, from a variety of observation modalities, on multiple embodiments, and further, exhibits positive transfer: the model benefits from diverse joint training across internet-scale language, vision, and visual-language domains.
