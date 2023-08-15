@@ -28,19 +28,15 @@ pip install palme
 
 ```python
 import torch
-from palme.model import PalmE
+from palme import PalmE
 
-# Sample text token tensor
-text_tokens = torch.randint(0, 32002, (1, 50), dtype=torch.long)
-
-# Sample image tensor
-images = torch.randn(1, 3, 224, 224)
+#usage
+img = torch.randn(1, 3, 256, 256)
+caption_tokens = torch.randint(0, 4)
 
 model = PalmE()
+output = model(img, caption_tokens)
 
-output = model.forward(text_tokens=text_tokens, images=images)
-
-print(f"Output: {output}")
 ```
 ---
 
