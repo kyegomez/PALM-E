@@ -60,12 +60,6 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 - 🌐 Train on the datasets used in the paper.
 
 ## Citation
-
-Certainly! Here's a citation for your `README.md`:
-
-```markdown
-### Citation
-
 ```
 @article{driess2023palme,
   title={PaLM-E: An Embodied Multimodal Language Model},
