@@ -4,7 +4,7 @@ from functools import partial, wraps
 
 import torch
 import torch.nn.functional as F
-from palmecore.flash import attention
+from palme.core.flash import attention
 from einops import rearrange
 from packaging import version
 from torch import Tensor, einsum, nn
