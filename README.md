@@ -59,6 +59,20 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 - 🚂 Recreate the training strategy detailed in the paper.
 - 🌐 Train on the datasets used in the paper.
 
-## 📘 Documentation
-* Documentation will come soon
+## Citation
+
+Certainly! Here's a citation for your `README.md`:
+
+```markdown
+### Citation
+
+```
+@article{driess2023palme,
+  title={PaLM-E: An Embodied Multimodal Language Model},
+  author={Driess, Danny and Xia, Fei and Sajjadi, Mehdi S. M. and Lynch, Corey and Chowdhery, Aakanksha and Ichter, Brian and Wahid, Ayzaan and Tompson, Jonathan and Vuong, Quan and Yu, Tianhe and Huang, Wenlong and Chebotar, Yevgen and Sermanet, Pierre and Duckworth, Daniel and Levine, Sergey and Vanhoucke, Vincent and Hausman, Karol and Toussaint, Marc and Greff, Klaus and Zeng, Andy and Mordatch, Igor and Florence, Pete},
+  journal={arXiv preprint arXiv:2303.03378},
+  year={2023},
+  url={https://doi.org/10.48550/arXiv.2303.03378}
+}
+```
 
