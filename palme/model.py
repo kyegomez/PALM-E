@@ -7,6 +7,7 @@ from palme.core.transformer import (
     AndromedaEmbedding,
     AutoregressiveWrapper,
     Decoder,
+    Encoder,
     Transformer,
     ViTransformerWrapper,
 )
@@ -69,116 +70,6 @@ class PALMETokenizer:
         except Exception as e:
             print(f"Error during tokenization {e}")
         
-# class PalmE(nn.Module):
-#     def __init__(self,
-#                  num_tokens: int = 50304,
-#                  dim: int = 2048,
-#                  depth: int = 16,
-#                  dim_head: int = 128,
-#                  heads: int = 8,
-#                  flash_attn=True,
-#                  qk_rmsnorm=False):
-#         super(PalmE, self).__init__()
-#         self.num_tokens = num_tokens
-#         self.dim = dim
-#         self.depth = depth
-#         self.dim_head = dim_head
-
-#         self.heads = heads
-#         self.flash_attn = flash_attn
-#         self.qk_rmsnorm = qk_rmsnorm
-        
-#         try:
-
-#             self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
-
-#             self.embed = bitsandbytes.nn.modules.Embedding(
-#                 self.num_tokens,
-#                 self.dim,
-#                 padding_idx=1
-#             )
-
-
-
-#             self.output_projection = torch.nn.Linear(
-#                 self.dim, self.num_tokens, bias=False
-#             )
-#             torch.nn.init.normal_(
-#                 self.output_projection.weight, mean=0, std=self.dim**-0.5
-#             )
-
-#             self.decoder = PaLM(
-#                 num_tokens=self.num_tokens,
-#                 dim=self.dim,
-#                 depth=self.depth,
-#                 dim_head=self.dim_head,
-#                 heads=self.heads,
-#                 flash_attn=self.flash_attn,
-#                 qk_rmsnorm=self.qk_rmsnorm,
-#             )
-
-#             self.perceive = PerceiverResampler(
-#                 dim = 1024,
-#                 depth = 2,
-#                 dim_head = 8,
-#                 num_latents = 50,
-#                 num_media_embeds = 257
-#             )
-
-#             self.image_proj = torch.nn.Linear(1024, self.num_tokens, bias=False)
-#             torch.nn.init.normal_(
-#                 self.image_proj.weight, mean=0, std=self.num_tokens**-0.5
-#             )
-
-#         except Exception as e:
-#             print(f"Error initlizing palme components: {e}")
-#     def forward(self, text_tokens, images):
-#         # Explicitly cast text_tokens to int64 (long)
-#         print(f"Original text tokens type: {text_tokens.dtype}")
-        
-#         text_tokens = text_tokens.to(torch.long)
-#         print(f'text tokens shape conversion to torch long: {text_tokens.dtype}')
-
-#         # Print the initial shape of text tokens for clarity
-#         print("Initial text tokens shape:", text_tokens.shape)
-#         print(f"Initial text tokens dtype {text_tokens.dtype}")
-        
-#         # Process images with the VIT model
-#         images = self.vit_model(pixel_values=images)["last_hidden_state"]
-#         print("Images after VIT model:", images.shape)
-#         print(f"Images dtype: {images.dtype}")
-        
-#         # Reshape images with perceive and project
-#         images = self.perceive(images).squeeze(1)
-#         print("Images after PerceiverResampler:", images.shape)
-#         print(f"Images dtype: {images.dtype}")
-        
-#         images = self.image_proj(images)
-#         print("Images after image_proj:", images.shape)
-#         print(f"Images dtype: {images.dtype}")
-
-#         # Process the text tokens
-#         model_input = self.decoder(text_tokens)
-#         print("Text tokens after decoding:", model_input.shape)
-#         print(f"Model input type: {model_input.dtype}")
-
-#         # Check dimension equality before concatenation
-#         if model_input.shape[:2] != images.shape[:2]:
-#             raise ValueError("Mismatched dimensions between images and text tokens")
-
-#         # Convert images to torch.int64 for concatenation
-#         images = images.to(torch.int64)
-
-#         # Concatenate along the last dimension
-#         concatenated_input = torch.cat([model_input, images], dim=-1)
-#         print("Shape after concatenation:", concatenated_input.shape)
-#         print(f"Model input type after concatenation: {concatenated_input.dtype}")
-
-#         # Pass concatenated tensor through the decoder
-#         output = self.decoder(concatenated_input)[0]
-#         print(f"Output dtype: {output.dtype}")
-#         return output
-
 
 
 class PalmE(nn.Module):
@@ -231,7 +122,7 @@ class PalmE(nn.Module):
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
             patch_size=patch_size,
-            attn_layers=Decoder(
+            attn_layers=Encoder(
                 dim=dim,
                 depth=depth,
                 dim_head=dim_head,
