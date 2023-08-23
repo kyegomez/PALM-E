@@ -117,7 +117,7 @@ class PalmE(nn.Module):
                  attn_qk_norm=True, 
                  attn_qk_norm_dim_scale=True, 
                  embedding_provider=AndromedaEmbedding()):
-        super(PalmE).__init__()
+        super().__init__()
 
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
@@ -154,7 +154,7 @@ class PalmE(nn.Module):
 
         self.decoder = AutoregressiveWrapper(self.transformer)
 
-    def forward(self, img, text_tokens, **kwargs):
+    def forward(self, text_tokens, img, **kwargs):
         """
         Forward pass through the model. It expects the input text_tokens.
         Args:
