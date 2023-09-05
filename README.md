@@ -54,9 +54,6 @@ output = model(text, img)
 
 # Training
 
-
-## 📚 Training
-
 1. Set the environment variables:
    - `ENTITY_NAME`: Your wandb project name
    - `OUTPUT_DIR`: Directory to save the weights (e.g., `./weights`)
@@ -72,9 +69,6 @@ output = model(text, img)
 
 For more information, refer to the [Training SOP](DOCs/TRAINING.md).
 
----
-
-
 
 
 ----
@@ -82,8 +76,9 @@ For more information, refer to the [Training SOP](DOCs/TRAINING.md).
 # Model Architecture
 ![model architecture](image6.png)
 
-user input VISION -> vit -> embed -> LLM decoder
-user input LAN -> embed -> llm decoder
+input VISION -> vit -> embed -> LLM decoder
+
+input LAN -> text embed -> llm decoder
 
 PaLM-E uses a pre-trained language model to process sensor data and generate text. 
 
