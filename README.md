@@ -76,6 +76,8 @@ For more information, refer to the [Training SOP](DOCs/TRAINING.md).
 ----
 
 # Model Architecture
+![model architecture](image6.png)
+
 input VISION -> vit -> embed -> LLM decoder
 
 input LAN -> text embed -> llm decoder
