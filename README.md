@@ -50,6 +50,40 @@ output = model(text, img)
 ```
 ---
 
+# Model
+PaLM-E uses a pre-trained language model to process sensor data and generate text. 
+
+It converts sensor data, such as images, into a representation similar to how words are processed in a language model. 
+
+Language models represent text mathematically by dividing it into tokens, which are associated with high-dimensional vectors. 
+
+The model uses mathematical operations on these vectors to predict the next word token. 
+
+PaLM-E takes inputs in the form of "multimodal sentences," which can include text and other modalities like images or robot states. 
+
+It generates text output based on these inputs, which can be in the form of answers to questions or sequences of decisions.
+![model architecture](image6.png)
+
+---
+
+# Dataset Strategy
+Here is a summary table of the key datasets mentioned in the paper:
+
+| Dataset | Tasks | Size | Link |
+|-|-|-|-|  
+| TAMP | Robotic manipulation planning, VQA | 96,000 scenes | Custom dataset |
+| Language Table | Robotic manipulation planning | Custom dataset | [Link](https://github.com/google-research/language-table) |  
+| Mobile Manipulation | Robotic navigation and manipulation planning, VQA | 2912 sequences | Based on SayCan dataset |
+| WebLI | Image-text retrieval | 66M image-caption pairs | [Link](https://arxiv.org/abs/2209.06794) |
+| VQAv2 | Visual question answering | 1.1M questions on COCO images | [Link](https://visualqa.org/) |  
+| OK-VQA | Visual question answering requiring external knowledge | 14,031 questions on COCO images | [Link](https://allenai.org/data/ok-vqa) |
+| COCO | Image captioning | 330K images with captions | [Link](https://cocodataset.org/) |
+| Wikipedia | Text corpus | N/A | [Link](https://en.wikipedia.org) |
+
+The key robotics datasets were collected specifically for this work, while the larger vision-language datasets (WebLI, VQAv2, OK-VQA, COCO) are standard benchmarks in that field. The datasets range from tens of thousands of examples for the robotics domains to tens of millions for the internet-scale vision-language data.
+
+---
+
 ## Contribute || Be Part of the PALM-E Adventure 🤝
 
 Your brilliance is needed! Join us, and together, let's make PALM-E even more awe-inspiring:
@@ -63,14 +97,19 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 
 🐞 Fixes, 🎨 enhancements, 📝 docs, or 💡 ideas – all are welcome! Let's shape the future of AI, hand in hand.
 
+---
+
 ## Roadmap
 
-- 🕵️ Verify decoder configurations.
-- 🚂 Recreate the training strategy detailed in the paper.
-- 🌐 Train on the datasets used in the paper.
+- [ ] URGENT: Debug Tokenizer, make sure multi-modal inputs work. 
+- [ ] Create Dataset Strategy
+- [ ] Upload Training Documentation
+- [ ] Get Training running with multi-modal
+
+---
 
 ## Citation
-```
+```latex
 @article{driess2023palme,
   title={PALM-E: An Embodied Multimodal Language Model},
   author={Driess, Danny and Xia, Fei and Sajjadi, Mehdi S. M. and Lynch, Corey and Chowdhery, Aakanksha and Ichter, Brian and Wahid, Ayzaan and Tompson, Jonathan and Vuong, Quan and Yu, Tianhe and Huang, Wenlong and Chebotar, Yevgen and Sermanet, Pierre and Duckworth, Daniel and Levine, Sergey and Vanhoucke, Vincent and Hausman, Karol and Toussaint, Marc and Greff, Klaus and Zeng, Andy and Mordatch, Igor and Florence, Pete},
