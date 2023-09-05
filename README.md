@@ -2,6 +2,8 @@
 
 
 # 🌴 PALM-E: A Multi-Modal AI Model 
+![model architecture](image6.png)
+
 
 This is the open source implementation of the SOTA multi-modality foundation model "PALM-E: An Embodied Multimodal Language Model" from Google, PALM-E is a single large embodied multimodal model, that can address a variety of embodied reasoning tasks, from a variety of observation modalities, on multiple embodiments, and further, exhibits positive transfer: the model benefits from diverse joint training across internet-scale language, vision, and visual-language domains.
 
@@ -74,8 +76,6 @@ For more information, refer to the [Training SOP](DOCs/TRAINING.md).
 ----
 
 # Model Architecture
-![model architecture](image6.png)
-
 input VISION -> vit -> embed -> LLM decoder
 
 input LAN -> text embed -> llm decoder
