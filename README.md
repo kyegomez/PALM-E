@@ -50,7 +50,12 @@ output = model(text, img)
 ```
 ---
 
-# Model
+# Model Architecture
+![model architecture](image6.png)
+
+user input VISION -> vit -> embed -> LLM decoder
+user input LAN -> embed -> llm decoder
+
 PaLM-E uses a pre-trained language model to process sensor data and generate text. 
 
 It converts sensor data, such as images, into a representation similar to how words are processed in a language model. 
@@ -62,7 +67,6 @@ The model uses mathematical operations on these vectors to predict the next word
 PaLM-E takes inputs in the form of "multimodal sentences," which can include text and other modalities like images or robot states. 
 
 It generates text output based on these inputs, which can be in the form of answers to questions or sequences of decisions.
-![model architecture](image6.png)
 
 ---
 
