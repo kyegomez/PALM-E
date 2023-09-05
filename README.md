@@ -52,6 +52,33 @@ output = model(text, img)
 ```
 ---
 
+# Training
+
+
+## 📚 Training
+
+1. Set the environment variables:
+   - `ENTITY_NAME`: Your wandb project name
+   - `OUTPUT_DIR`: Directory to save the weights (e.g., `./weights`)
+   - `MASTER_ADDR`: For distributed training
+   - `MASTER_PORT` For master port distributed training
+   - `RANK`- Number of nodes services
+   - `WORLD_SIZE` Number of gpus
+
+2. Configure the training:
+   - Accelerate Config
+   - Enable Deepspeed 3
+   - Accelerate launch train.py
+
+For more information, refer to the [Training SOP](DOCs/TRAINING.md).
+
+---
+
+
+
+
+----
+
 # Model Architecture
 ![model architecture](image6.png)
 
