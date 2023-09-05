@@ -55,6 +55,30 @@ output = model(text, img)
 ---
 
 # Training
+Here is a summary table of the key training hyperparameters mentioned in the paper:
+
+| Hyperparameter | Value |  
+|-|-|
+| Batch size | 2048 |
+| Learning rate | 1.5e-4  |
+| Warmup steps | 10,000 |
+| Gradient accumulation steps | 4 |
+| Weight decay | 0.01 |
+| Dropout rate | 0.1 |
+| Embedding dropout rate | 0.1 |
+| Attention dropout rate | 0.1 |
+| Optimizer | AdamW |
+| Gradient clipping | 1.0 |
+
+The key details are:
+- Batch size of 2048 
+- Learning rate of 1.5e-4 with 10k warmup steps
+- AdamW optimizer
+- Dropout of 0.1 on embeddings, attention, and full model
+- Weight decay of 0.01
+- Gradient clipping of 1.0
+
+They used a fairly standard transformer hyperparameters configuration. The large batch size and gradient accumulation allows them to train huge models.
 
 1. Set the environment variables:
    - `ENTITY_NAME`: Your wandb project name
