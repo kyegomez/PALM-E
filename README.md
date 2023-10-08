@@ -29,7 +29,6 @@ This is the open source implementation of the SOTA multi-modality foundation mod
 
 
 
-
 ## 🚀 Quick Start
 
 ### Installation 📦
@@ -97,29 +96,6 @@ They used a fairly standard transformer hyperparameters configuration. The large
    - Accelerate launch train.py
 
 For more information, refer to the [Training SOP](DOCs/TRAINING.md).
-
-
-
-----
-
-# Model Architecture
-![model architecture](image6.png)
-
-input VISION -> vit -> embed -> LLM decoder
-
-input LAN -> text embed -> llm decoder
-
-PaLM-E uses a pre-trained language model to process sensor data and generate text. 
-
-It converts sensor data, such as images, into a representation similar to how words are processed in a language model. 
-
-Language models represent text mathematically by dividing it into tokens, which are associated with high-dimensional vectors. 
-
-The model uses mathematical operations on these vectors to predict the next word token. 
-
-PaLM-E takes inputs in the form of "multimodal sentences," which can include text and other modalities like images or robot states. 
-
-It generates text output based on these inputs, which can be in the form of answers to questions or sequences of decisions.
 
 ---
 
