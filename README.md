@@ -46,10 +46,13 @@ from palme.model import PalmE
 
 #usage
 img = torch.randn(1, 3, 256, 256)
-text = torch.randint(0, 20000, (1, 1024))
+caption = torch.randint(0, 20000, (1, 1024))
 
 model = PalmE()
-output = model(text, img)
+output = model(img, caption)
+print(output.shape) # (1, 1024, 20000)
+
+
 
 ```
 ---
@@ -153,15 +156,6 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 
 ---
 
-## Roadmap
-
-- [ ] URGENT: Debug Tokenizer, make sure multi-modal inputs work. 
-- [ ] Create Dataset Strategy
-- [ ] Upload Training Documentation
-- [ ] Get Training running with multi-modal
-
----
-
 ## Citation
 ```latex
 @article{driess2023palme,
@@ -173,3 +167,13 @@ Your brilliance is needed! Join us, and together, let's make PALM-E even more aw
 }
 ```
 
+-----
+
+## Roadmap
+
+- [ ] URGENT: Debug Tokenizer, make sure multi-modal inputs work. 
+- [ ] Create Dataset Strategy
+- [ ] Upload Training Documentation
+- [ ] Get Training running with multi-modal
+
+---
