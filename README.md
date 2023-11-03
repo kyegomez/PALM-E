@@ -22,11 +22,14 @@ This is the open source implementation of the SOTA multi-modality foundation mod
 [![Share on Pinterest](https://img.shields.io/badge/-Share%20on%20Pinterest-red)](https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E&media=https%3A%2F%2Fexample.com%2Fimage.jpg&description=PALM-E%2C%20the%20Revolutionary%20Multi-Modal%20Model%20that%20will%20Change%20the%20Way%20We%20Work%20%23PALM-E%20%23Multi-Modal)
 [![Share on WhatsApp](https://img.shields.io/badge/-Share%20on%20WhatsApp-green)](https://api.whatsapp.com/send?text=I%20just%20discovered%20PALM-E,%20the%20all-new%20Multi-Modal%20model%20that%20promises%20to%20revolutionize%20automation.%20Join%20me%20on%20this%20exciting%20journey%20towards%20a%20smarter%20future.%20%23PALM-E%20%23Multi-Modal%0A%0Ahttps%3A%2F%2Fgithub.com%2Fkyegomez%2FPALM-E)
 
+## Note
+- This is just the model architecture, no pretrained weights, no tokenizer
+- To actually conduct inference you would need to --> setup tokenizer for text and images -> train -> inference
+- If you are doing research into multi modal models and would like to train this model and release it open source join the agora lab by clicking on the banner!
+
 ## Appreciation
 * All the creators in Agora, [Join Agora](https://discord.gg/qUtxnK2NMf) the community of AI engineers changing the world with their creations.
 * LucidRains for inspiring me to devote myself to open source AI
-
-
 
 
 ## 🚀 Quick Start
