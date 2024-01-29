@@ -54,7 +54,7 @@ class PalmE(nn.Module):
         attn_flash: bool = True,
         qk_norm: bool = True,
     ):
-        super(RT2, self).__init__()
+        super(PalmE, self).__init__()
 
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
