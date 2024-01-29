@@ -60,7 +60,9 @@ class PalmE(nn.Module):
             image_size=image_size,
             patch_size=patch_size,
             attn_layers=Encoder(
-                dim=encoder_dim, depth=encoder_depth, heads=encoder_heads
+                dim=encoder_dim,
+                depth=encoder_depth,
+                heads=encoder_heads,
             ),
         )
 
@@ -81,7 +83,9 @@ class PalmE(nn.Module):
 
         self.decoder = AutoregressiveWrapper(self.decoder)
 
-    def forward(self, img: torch.Tensor, text: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self, img: torch.Tensor, text: torch.Tensor
+    ) -> torch.Tensor:
         """
         Forward pass of the RT2 model.
 

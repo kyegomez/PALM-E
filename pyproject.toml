@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "palme"
-version = "0.1.0"
+version = "0.1.2"
 description = "palme - Pytorch"
 authors = ["Kye Gomez <kye@apac.ai>"]
 license = "MIT"
@@ -15,13 +15,32 @@ keywords = ["artificial intelligence", "attention mechanism", "transformers"]
 [tool.poetry.dependencies]
 python = "^3.6"
 torch = "*"
-lion-pytorch = "*"
-numpy = "*"
 einops = "*"
-accelerate = "*"
-transformers = "*"
-SentencePiece = "*"
-datasets = "*"
-matplotlib = "*"
+zetascale = "*"
 
-[tool.poetry.dev-dependencies]
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.1.6"
+types-toml = "^0.10.8.1"
+types-redis = "^4.3.21.6"
+types-pytz = "^2023.3.0.0"
+black = "^23.1.0"
+types-chardet = "^5.0.4.6"
+mypy-protobuf = "^3.0.0"
+
+
+[tool.autopep8]
+max_line_length = 80
+ignore = "E501,W6"  # or ["E501", "W6"]
+in-place = true
+recursive = true
+aggressive = 3
+
+
+[tool.ruff]
+line-length = 70
+
+[tool.black]
+line-length = 70
+target-version = ['py38']
+preview = true
