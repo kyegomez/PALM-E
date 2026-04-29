@@ -54,9 +54,41 @@ model = PalmE()
 output = model(img, caption)
 print(output.shape) # (1, 1024, 20000)
 
+# `output` is a logits tensor shaped (batch, sequence_length, vocab_size).
+# To get token ids, pick the most likely vocabulary item for each position:
+token_ids = output.argmax(dim=-1)
+print(token_ids.shape) # (1, 1024)
 
-
+# If you have a tokenizer from your training setup, decode the ids to text:
+# answer = tokenizer.decode(token_ids[0], skip_special_tokens=True)
+# print(answer)
 ```
+
+### Understanding / unpacking model output
+
+`PalmE` returns raw logits, not decoded text. The tensor dimensions are:
+
+- `batch`: one row per image/text input pair
+- `sequence_length`: one output position per input text token
+- `vocab_size`: one score for every possible token in the configured vocabulary
+
+For a quick greedy decode path:
+
+```python
+with torch.no_grad():
+    logits = model(img, caption)
+
+token_ids = logits.argmax(dim=-1)  # (batch, sequence_length)
+```
+
+Those `token_ids` are still numeric token ids. To turn them into human-readable text you need the same tokenizer used for training the model:
+
+```python
+answer = tokenizer.decode(token_ids[0], skip_special_tokens=True)
+```
+
+This repository currently provides the model architecture only. It does not ship pretrained weights or a tokenizer, so the decoded answer will only be meaningful after you connect a tokenizer and train/load compatible weights.
+
 ---
 
 
